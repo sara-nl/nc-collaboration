@@ -8,8 +8,8 @@
 namespace OCA\Invitation\Controller;
 
 use Exception;
-use OCA\Invitation\AppInfo\InvitationApp;
 use OCA\Invitation\AppInfo\AppError;
+use OCA\Invitation\AppInfo\Application;
 use OCA\Invitation\Db\Schema;
 use OCA\Invitation\Federation\Invitation;
 use OCA\Invitation\Service\InvitationService;
@@ -18,7 +18,6 @@ use OCA\Invitation\Service\NotFoundException;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\AppFramework\Http\TemplateResponse;
 use OCP\ILogger;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
@@ -33,21 +32,21 @@ class InvitationController extends Controller
         InvitationService $service,
         LoggerInterface $logger
     ) {
-        parent::__construct(InvitationApp::APP_NAME, $request);
+        parent::__construct(Application::APP_ID, $request);
         $this->service = $service;
         $this->logger = $logger;
     }
 
-    /**
-     *
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     * @return TemplateResponse
-     */
-    public function index(): TemplateResponse
-    {
-        return new TemplateResponse($this->appName, 'invitation.index');
-    }
+    // /**
+    //  *
+    //  * @NoAdminRequired
+    //  * @NoCSRFRequired
+    //  * @return TemplateResponse
+    //  */
+    // public function index(): TemplateResponse
+    // {
+    //     return new TemplateResponse($this->appName, 'invitation.main');
+    // }
 
     /**
      * Removes the notification that is associated with the invitation with specified token.
@@ -62,12 +61,12 @@ class InvitationController extends Controller
             $manager = \OC::$server->getNotificationManager();
             $notification = $manager->createNotification();
             $notification
-                ->setApp(InvitationApp::APP_NAME)
+                ->setApp(Application::APP_ID)
                 ->setUser(\OC::$server->getUserSession()->getUser()->getUID())
                 ->setObject(MeshRegistryService::PARAM_NAME_TOKEN, $token);
             $manager->markProcessed($notification);
         } catch (Exception $e) {
-            $this->logger->error('Remove notification failed: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => InvitationApp::APP_NAME]);
+            $this->logger->error('Remove notification failed: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => Application::APP_ID]);
             throw $e;
         }
     }
@@ -98,6 +97,7 @@ class InvitationController extends Controller
     /**
      * example url: https://rd-1.nl/apps/invitation/invitations?status=open,accepted
      * 
+     * @PublicPage
      * @NoAdminRequired
      * @NoCSRFRequired
      */
@@ -111,7 +111,7 @@ class InvitationController extends Controller
             }
 
             if (empty($fieldsAndValues)) {
-                $this->logger->error("findAll() - missing query parameter.", ['app' => InvitationApp::APP_NAME]);
+                $this->logger->error("findAll() - missing query parameter.", ['app' => Application::APP_ID]);
                 return new DataResponse(
                     [
                         'success' => false,
@@ -130,7 +130,7 @@ class InvitationController extends Controller
                 Http::STATUS_OK
             );
         } catch (Exception $e) {
-            $this->logger->error('invitations not found for fields: ' . print_r($status, true) . 'Error: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => InvitationApp::APP_NAME]);
+            $this->logger->error('invitations not found for fields: ' . print_r($status, true) . 'Error: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => Application::APP_ID]);
             return new DataResponse(
                 [
                     'success' => false,
@@ -143,12 +143,13 @@ class InvitationController extends Controller
 
     /**
      *
+     * @NoAdminRequired
      * @NoCSRFRequired
      */
     public function findByToken(string $token = null): DataResponse
     {
         if (!isset($token)) {
-            $this->logger->error("findByToken() - missing parameter 'token'.", ['app' => InvitationApp::APP_NAME]);
+            $this->logger->error("findByToken() - missing parameter 'token'.", ['app' => Application::APP_ID]);
             return new DataResponse(
                 [
                     'success' => false,
@@ -167,7 +168,7 @@ class InvitationController extends Controller
                 Http::STATUS_OK,
             );
         } catch (NotFoundException $e) {
-            $this->logger->error("invitation not found for token '$token'. Error: " . $e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => InvitationApp::APP_NAME]);
+            $this->logger->error("invitation not found for token '$token'. Error: " . $e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => Application::APP_ID]);
             return new DataResponse(
                 [
                     'success' => false,
@@ -176,7 +177,7 @@ class InvitationController extends Controller
                 Http::STATUS_NOT_FOUND,
             );
         } catch (Exception $e) {
-            $this->logger->error("invitation not found for token '$token'. Error: " . $e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => InvitationApp::APP_NAME]);
+            $this->logger->error("invitation not found for token '$token'. Error: " . $e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => Application::APP_ID]);
             return new DataResponse(
                 [
                     'success' => false,

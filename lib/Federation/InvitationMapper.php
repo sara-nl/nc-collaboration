@@ -3,7 +3,7 @@
 namespace OCA\Invitation\Federation;
 
 use Exception;
-use OCA\Invitation\AppInfo\InvitationApp;
+use OCA\Invitation\AppInfo\Application;
 use OCA\Invitation\Db\Schema;
 use OCA\Invitation\Federation\Invitation;
 use OCA\Invitation\Federation\VInvitation;
@@ -55,15 +55,16 @@ class InvitationMapper extends QBMapper
         try {
             $qb = $this->db->getQueryBuilder();
             $qb->automaticTablePrefix(false);
-            $result = $qb->select('*')
+            $qb->select('*')
                 ->from(Schema::VIEW_INVITATIONS, 'i')
-                ->where($qb->expr()->eq('i.token', $qb->createNamedParameter($token)))
-                ->executeQuery()->fetch();
+                ->where($qb->expr()->eq('i.token', $qb->createNamedParameter($token)));
+            $this->logger->debug($qb->getSQL(), ['app' => Application::APP_ID]);
+            $result = $qb->executeQuery()->fetch();
             if (is_array($result) && count($result) > 0) {
                 return $this->getVInvitation($result);
             }
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => InvitationApp::APP_NAME]);
+            $this->logger->error($e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => Application::APP_ID]);
             throw new NotFoundException($e->getMessage());
         }
         throw new NotFoundException("Invitation not found for token $token");
@@ -141,7 +142,7 @@ class InvitationMapper extends QBMapper
                 }
             }
         } catch (Exception $e) {
-            $this->logger->error('updateInvitation failed with error: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => InvitationApp::APP_NAME]);
+            $this->logger->error('updateInvitation failed with error: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => Application::APP_ID]);
         }
         return false;
     }
@@ -162,7 +163,7 @@ class InvitationMapper extends QBMapper
             $qb->setParameter(Schema::INVITATION_STATUS, $statuses, IQueryBuilder::PARAM_STR_ARRAY);
             $qb->executeQuery();
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => InvitationApp::APP_NAME]);
+            $this->logger->error($e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => Application::APP_ID]);
             throw new Exception('An error occurred trying to delete invitations.');
         }
     }
@@ -198,7 +199,7 @@ class InvitationMapper extends QBMapper
             $invitation->setRemoteUserProviderName($associativeArray[Schema::VINVITATION_REMOTE_USER_PROVIDER_NAME]);
             return $invitation;
         }
-        $this->logger->error('Unable to create a new Invitation from associative array: ' . print_r($associativeArray, true), ['app' => InvitationApp::APP_NAME]);
+        $this->logger->error('Unable to create a new Invitation from associative array: ' . print_r($associativeArray, true), ['app' => Application::APP_ID]);
         return null;
     }
 

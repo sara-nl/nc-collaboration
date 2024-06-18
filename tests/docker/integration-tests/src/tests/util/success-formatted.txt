@@ -1,0 +1,703 @@
+"OC\\AppFramework\\Http\\Request Object
+(
+    [inputStream:protected] => php://input
+    [content:protected] => 
+    [items:protected] => Array
+        (
+            [params] => Array
+                (
+                )
+
+            [get] => Array
+                (
+                )
+
+            [post] => Array
+                (
+                )
+
+            [files] => Array
+                (
+                )
+
+            [server] => Array
+                (
+                    [HTTP_AUTHORIZATION] => Basic YWRtaW46cGFzc3c=
+                    [modHeadersAvailable] => true
+                    [htaccessWorking] => true
+                    [front_controller_active] => true
+                    [HTTP_HOST] => nc-1
+                    [HTTP_X_FORWARDED_FOR] => 10.1.0.1
+                    [HTTP_X_FORWARDED_PROTO] => http
+                    [HTTP_X_FORWARDED_HOST] => nc-1.nl
+                    [HTTP_CONNECTION] => close
+                    [HTTP_USER_AGENT] => curl/7.81.0
+                    [HTTP_ACCEPT] => */*
+                    [HTTP_OCS_APIREQUEST] => true
+                    [PATH] => /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+                    [SERVER_SIGNATURE] => <address>Apache/2.4.59 (Debian) Server at nc-1 Port 80</address>
+
+                    [SERVER_SOFTWARE] => Apache/2.4.59 (Debian)
+                    [SERVER_NAME] => nc-1
+                    [SERVER_ADDR] => 10.1.0.100
+                    [SERVER_PORT] => 80
+                    [REMOTE_ADDR] => 10.1.0.1
+                    [DOCUMENT_ROOT] => /var/www/html
+                    [REQUEST_SCHEME] => http
+                    [CONTEXT_PREFIX] => 
+                    [CONTEXT_DOCUMENT_ROOT] => /var/www/html
+                    [SERVER_ADMIN] => webmaster@localhost
+                    [SCRIPT_FILENAME] => /var/www/html/ocs/v2.php
+                    [REMOTE_PORT] => 38516
+                    [GATEWAY_INTERFACE] => CGI/1.1
+                    [SERVER_PROTOCOL] => HTTP/1.0
+                    [REQUEST_METHOD] => GET
+                    [QUERY_STRING] => 
+                    [REQUEST_URI] => /ocs/v2.php/core/getapppassword
+                    [SCRIPT_NAME] => /ocs/v2.php
+                    [PATH_INFO] => /core/getapppassword
+                    [PATH_TRANSLATED] => redirect:/index.php
+                    [PHP_SELF] => /ocs/v2.php/core/getapppassword
+                    [PHP_AUTH_USER] => admin
+                    [PHP_AUTH_PW] => passw
+                    [REQUEST_TIME_FLOAT] => 1718637660.2152
+                    [REQUEST_TIME] => 1718637660
+                    [argv] => Array
+                        (
+                        )
+
+                    [argc] => 0
+                )
+
+            [env] => Array
+                (
+                    [HOSTNAME] => da5fe9de4559
+                    [PHP_VERSION] => 8.2.20
+                    [APACHE_CONFDIR] => /etc/apache2
+                    [NEXTCLOUD_VERSION] => 29.0.1
+                    [PHP_INI_DIR] => /usr/local/etc/php
+                    [GPG_KEYS] => 39B641343D8C104B2B146DC3F9C39DC0B9698544 E60913E4DF209907D8E30D96659A97C9CF2A795A 1198C0117593497A5EC5C199286AF1F9897469DC
+                    [PHP_LDFLAGS] => -Wl,-O1 -pie
+                    [ADMIN_PASS] => passw
+                    [PWD] => /var/www/html
+                    [APACHE_LOG_DIR] => /var/log/apache2
+                    [PHP_MEMORY_LIMIT] => 512M
+                    [LANG] => C
+                    [APACHE_BODY_LIMIT] => 1073741824
+                    [PHP_SHA256] => 4474cc430febef6de7be958f2c37253e5524d5c5331a7e1765cd2d2234881e50
+                    [APACHE_PID_FILE] => /var/run/apache2/apache2.pid
+                    [PHPIZE_DEPS] => autoconf \t\tdpkg-dev \t\tfile \t\tg++ \t\tgcc \t\tlibc-dev \t\tmake \t\tpkg-config \t\tre2c
+                    [TEST_UUID_1] => c33056f9-2abf-4a1c-98d3-b579b1db8e31
+                    [TEST_UUID_2] => 5f23338a-b767-41e3-9233-1c1249444663
+                    [PHP_URL] => https://www.php.net/distributions/php-8.2.20.tar.xz
+                    [APACHE_RUN_GROUP] => www-data
+                    [PHP_UPLOAD_LIMIT] => 512M
+                    [APACHE_LOCK_DIR] => /var/lock/apache2
+                    [SHLVL] => 0
+                    [PHP_CFLAGS] => -fstack-protector-strong -fpic -fpie -O2 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
+                    [APACHE_RUN_DIR] => /var/run/apache2
+                    [APACHE_ENVVARS] => /etc/apache2/envvars
+                    [APACHE_RUN_USER] => www-data
+                    [PATH] => /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+                    [DEBUG] => true
+                    [PHP_ASC_URL] => https://www.php.net/distributions/php-8.2.20.tar.xz.asc
+                    [PHP_CPPFLAGS] => -fstack-protector-strong -fpic -fpie -O2 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
+                )
+
+            [cookies] => Array
+                (
+                )
+
+            [urlParams] => Array
+                (
+                )
+
+            [parameters] => Array
+                (
+                )
+
+            [method] => GET
+            [requesttoken] => Array
+                (
+                )
+
+        )
+
+    [allowedKeys:protected] => Array
+        (
+            [0] => get
+            [1] => post
+            [2] => files
+            [3] => server
+            [4] => env
+            [5] => cookies
+            [6] => urlParams
+            [7] => parameters
+            [8] => method
+            [9] => requesttoken
+        )
+
+    [requestId:protected] => OC\\AppFramework\\Http\\RequestId Object
+        (
+            [secureRandom:protected] => OC\\Security\\SecureRandom Object
+                (
+                )
+
+            [requestId:protected] => 
+        )
+
+    [config:protected] => OC\\AllConfig Object
+        (
+            [connection:OC\\AllConfig:private] => 
+            [userCache:OC\\AllConfig:private] => OCP\\Cache\\CappedMemoryCache Object
+                (
+                    [capacity:OCP\\Cache\\CappedMemoryCache:private] => 512
+                    [cache:OCP\\Cache\\CappedMemoryCache:private] => Array
+                        (
+                        )
+
+                )
+
+            [systemConfig:OC\\AllConfig:private] => OC\\SystemConfig Object
+                (
+                    [sensitiveValues:protected] => Array
+                        (
+                            [instanceid] => 1
+                            [datadirectory] => 1
+                            [dbname] => 1
+                            [dbhost] => 1
+                            [dbpassword] => 1
+                            [dbuser] => 1
+                            [activity_dbname] => 1
+                            [activity_dbhost] => 1
+                            [activity_dbpassword] => 1
+                            [activity_dbuser] => 1
+                            [mail_from_address] => 1
+                            [mail_domain] => 1
+                            [mail_smtphost] => 1
+                            [mail_smtpname] => 1
+                            [mail_smtppassword] => 1
+                            [passwordsalt] => 1
+                            [secret] => 1
+                            [updater.secret] => 1
+                            [updater.server.url] => 1
+                            [trusted_proxies] => 1
+                            [preview_imaginary_url] => 1
+                            [proxyuserpwd] => 1
+                            [sentry.dsn] => 1
+                            [sentry.public-dsn] => 1
+                            [zammad.download.secret] => 1
+                            [zammad.portal.secret] => 1
+                            [zammad.secret] => 1
+                            [github.client_id] => 1
+                            [github.client_secret] => 1
+                            [log.condition] => Array
+                                (
+                                    [shared_secret] => 1
+                                )
+
+                            [license-key] => 1
+                            [redis] => Array
+                                (
+                                    [host] => 1
+                                    [password] => 1
+                                )
+
+                            [redis.cluster] => Array
+                                (
+                                    [seeds] => 1
+                                    [password] => 1
+                                )
+
+                            [objectstore] => Array
+                                (
+                                    [arguments] => Array
+                                        (
+                                            [options] => Array
+                                                (
+                                                    [credentials] => Array
+                                                        (
+                                                            [key] => 1
+                                                            [secret] => 1
+                                                        )
+
+                                                )
+
+                                            [key] => 1
+                                            [secret] => 1
+                                            [username] => 1
+                                            [password] => 1
+                                            [user] => Array
+                                                (
+                                                    [name] => 1
+                                                    [password] => 1
+                                                )
+
+                                        )
+
+                                )
+
+                            [objectstore_multibucket] => Array
+                                (
+                                    [arguments] => Array
+                                        (
+                                            [options] => Array
+                                                (
+                                                    [credentials] => Array
+                                                        (
+                                                            [key] => 1
+                                                            [secret] => 1
+                                                        )
+
+                                                )
+
+                                            [key] => 1
+                                            [secret] => 1
+                                            [username] => 1
+                                            [password] => 1
+                                            [user] => Array
+                                                (
+                                                    [name] => 1
+                                                    [password] => 1
+                                                )
+
+                                        )
+
+                                )
+
+                            [onlyoffice] => Array
+                                (
+                                    [jwt_secret] => 1
+                                )
+
+                        )
+
+                    [config:OC\\SystemConfig:private] => OC\\Config Object
+                        (
+                            [cache:protected] => Array
+                                (
+                                    [htaccess.RewriteBase] => /
+                                    [memcache.local] => \\OC\\Memcache\\APCu
+                                    [apps_paths] => Array
+                                        (
+                                            [0] => Array
+                                                (
+                                                    [path] => /var/www/html/apps
+                                                    [url] => /apps
+                                                    [writable] => 
+                                                )
+
+                                            [1] => Array
+                                                (
+                                                    [path] => /var/www/html/custom_apps
+                                                    [url] => /custom_apps
+                                                    [writable] => 1
+                                                )
+
+                                        )
+
+                                    [upgrade.disable-web] => 1
+                                    [passwordsalt] => vTtdPiLF5mxWWyNTVNbMrhBTE4rI3k
+                                    [secret] => MIOTZa6oerl0vEQFEEKeQ0fWwMGDN2lb7cW6Yb1l3blYwmC9
+                                    [trusted_domains] => Array
+                                        (
+                                            [0] => localhost
+                                        )
+
+                                    [datadirectory] => /var/www/html/data
+                                    [dbtype] => mysql
+                                    [version] => 29.0.1.1
+                                    [overwrite.cli.url] => http://localhost
+                                    [dbname] => nextcloud
+                                    [dbhost] => mariadb-nc-1
+                                    [dbport] => 
+                                    [dbtableprefix] => oc_
+                                    [loglevel] => 0
+                                    [trusted_proxies] => Array
+                                        (
+                                            [0] => 10.1.0.180
+                                        )
+
+                                    [overwritehost] => nc-1.nl
+                                    [overwriteprotocol] => https
+                                    [mysql.utf8mb4] => 1
+                                    [dbuser] => nextcloud
+                                    [dbpassword] => nextcloud
+                                    [installed] => 1
+                                    [instanceid] => oc0cys0f28e0
+                                )
+
+                            [envCache:protected] => Array
+                                (
+                                    [HOSTNAME] => da5fe9de4559
+                                    [PHP_VERSION] => 8.2.20
+                                    [APACHE_CONFDIR] => /etc/apache2
+                                    [NEXTCLOUD_VERSION] => 29.0.1
+                                    [PHP_INI_DIR] => /usr/local/etc/php
+                                    [GPG_KEYS] => 39B641343D8C104B2B146DC3F9C39DC0B9698544 E60913E4DF209907D8E30D96659A97C9CF2A795A 1198C0117593497A5EC5C199286AF1F9897469DC
+                                    [PHP_LDFLAGS] => -Wl,-O1 -pie
+                                    [ADMIN_PASS] => passw
+                                    [PWD] => /var/www/html
+                                    [APACHE_LOG_DIR] => /var/log/apache2
+                                    [PHP_MEMORY_LIMIT] => 512M
+                                    [LANG] => C
+                                    [APACHE_BODY_LIMIT] => 1073741824
+                                    [PHP_SHA256] => 4474cc430febef6de7be958f2c37253e5524d5c5331a7e1765cd2d2234881e50
+                                    [APACHE_PID_FILE] => /var/run/apache2/apache2.pid
+                                    [PHPIZE_DEPS] => autoconf \t\tdpkg-dev \t\tfile \t\tg++ \t\tgcc \t\tlibc-dev \t\tmake \t\tpkg-config \t\tre2c
+                                    [TEST_UUID_1] => c33056f9-2abf-4a1c-98d3-b579b1db8e31
+                                    [TEST_UUID_2] => 5f23338a-b767-41e3-9233-1c1249444663
+                                    [PHP_URL] => https://www.php.net/distributions/php-8.2.20.tar.xz
+                                    [APACHE_RUN_GROUP] => www-data
+                                    [PHP_UPLOAD_LIMIT] => 512M
+                                    [APACHE_LOCK_DIR] => /var/lock/apache2
+                                    [SHLVL] => 0
+                                    [PHP_CFLAGS] => -fstack-protector-strong -fpic -fpie -O2 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
+                                    [APACHE_RUN_DIR] => /var/run/apache2
+                                    [APACHE_ENVVARS] => /etc/apache2/envvars
+                                    [APACHE_RUN_USER] => www-data
+                                    [PATH] => /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+                                    [DEBUG] => true
+                                    [PHP_ASC_URL] => https://www.php.net/distributions/php-8.2.20.tar.xz.asc
+                                    [PHP_CPPFLAGS] => -fstack-protector-strong -fpic -fpie -O2 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
+                                )
+
+                            [configDir:protected] => /var/www/html/config/
+                            [configFilePath:protected] => /var/www/html/config/config.php
+                            [configFileName:protected] => config.php
+                            [isReadOnly:protected] => 
+                        )
+
+                )
+
+        )
+
+    [csrfTokenManager:protected] => OC\\Security\\CSRF\\CsrfTokenManager Object
+        (
+            [sessionStorage:OC\\Security\\CSRF\\CsrfTokenManager:private] => OC\\Security\\CSRF\\TokenStorage\\SessionStorage Object
+                (
+                    [session:OC\\Security\\CSRF\\TokenStorage\\SessionStorage:private] => OC\\Session\\CryptoSessionData Object
+                        (
+                            [session:protected] => OC\\Session\\Internal Object
+                                (
+                                    [sessionClosed:protected] => 1
+                                )
+
+                            [crypto:protected] => OC\\Security\\Crypto Object
+                                (
+                                    [cipher:OC\\Security\\Crypto:private] => phpseclib\\Crypt\\AES Object
+                                        (
+                                            [mode] => 2
+                                            [block_size] => 16
+                                            [key] => ??\u0010?t\tL?\u001c?2.???\u001c
+                                            [iv] => \u0013\u000f???[3}?\u001e????r
+                                            [encryptIV] => \u0013\u000f???[3}?\u001e????r
+                                            [decryptIV] => \u0013\u000f???[3}?\u001e????r
+                                            [continuousBuffer] => 
+                                            [enbuffer] => Array
+                                                (
+                                                    [ciphertext] => 
+                                                    [xor] => 
+                                                    [pos] => 0
+                                                    [enmcrypt_init] => 1
+                                                )
+
+                                            [debuffer] => Array
+                                                (
+                                                    [ciphertext] => 
+                                                    [xor] => 
+                                                    [pos] => 0
+                                                    [enmcrypt_init] => 1
+                                                )
+
+                                            [enmcrypt] => 
+                                            [demcrypt] => 
+                                            [enchanged] => 1
+                                            [dechanged] => 1
+                                            [ecb] => 
+                                            [cfb_init_len] => 600
+                                            [changed] => 
+                                            [padding] => 1
+                                            [paddable] => 1
+                                            [engine] => 3
+                                            [preferredEngine] => 
+                                            [cipher_name_mcrypt] => rijndael-128
+                                            [cipher_name_openssl] => aes-128-cbc
+                                            [cipher_name_openssl_ecb] => aes-128-ecb
+                                            [password_default_salt] => phpseclib
+                                            [inline_crypt] => 
+                                            [use_inline_crypt] => 1
+                                            [openssl_emulate_ctr] => 
+                                            [openssl_options] => 3
+                                            [explicit_key_length] => 
+                                            [skip_key_adjustment] => 
+                                            [w] => 
+                                            [dw] => 
+                                            [Nb] => 4
+                                            [key_length] => 16
+                                            [Nk] => 4
+                                            [Nr] => 
+                                            [c] => 
+                                            [kl] => 
+                                        )
+
+                                    [ivLength:OC\\Security\\Crypto:private] => 16
+                                    [config:OC\\Security\\Crypto:private] => OC\\AllConfig Object
+                                        (
+                                            [connection:OC\\AllConfig:private] => 
+                                            [userCache:OC\\AllConfig:private] => OCP\\Cache\\CappedMemoryCache Object
+                                                (
+                                                    [capacity:OCP\\Cache\\CappedMemoryCache:private] => 512
+                                                    [cache:OCP\\Cache\\CappedMemoryCache:private] => Array
+                                                        (
+                                                        )
+
+                                                )
+
+                                            [systemConfig:OC\\AllConfig:private] => OC\\SystemConfig Object
+                                                (
+                                                    [sensitiveValues:protected] => Array
+                                                        (
+                                                            [instanceid] => 1
+                                                            [datadirectory] => 1
+                                                            [dbname] => 1
+                                                            [dbhost] => 1
+                                                            [dbpassword] => 1
+                                                            [dbuser] => 1
+                                                            [activity_dbname] => 1
+                                                            [activity_dbhost] => 1
+                                                            [activity_dbpassword] => 1
+                                                            [activity_dbuser] => 1
+                                                            [mail_from_address] => 1
+                                                            [mail_domain] => 1
+                                                            [mail_smtphost] => 1
+                                                            [mail_smtpname] => 1
+                                                            [mail_smtppassword] => 1
+                                                            [passwordsalt] => 1
+                                                            [secret] => 1
+                                                            [updater.secret] => 1
+                                                            [updater.server.url] => 1
+                                                            [trusted_proxies] => 1
+                                                            [preview_imaginary_url] => 1
+                                                            [proxyuserpwd] => 1
+                                                            [sentry.dsn] => 1
+                                                            [sentry.public-dsn] => 1
+                                                            [zammad.download.secret] => 1
+                                                            [zammad.portal.secret] => 1
+                                                            [zammad.secret] => 1
+                                                            [github.client_id] => 1
+                                                            [github.client_secret] => 1
+                                                            [log.condition] => Array
+                                                                (
+                                                                    [shared_secret] => 1
+                                                                )
+
+                                                            [license-key] => 1
+                                                            [redis] => Array
+                                                                (
+                                                                    [host] => 1
+                                                                    [password] => 1
+                                                                )
+
+                                                            [redis.cluster] => Array
+                                                                (
+                                                                    [seeds] => 1
+                                                                    [password] => 1
+                                                                )
+
+                                                            [objectstore] => Array
+                                                                (
+                                                                    [arguments] => Array
+                                                                        (
+                                                                            [options] => Array
+                                                                                (
+                                                                                    [credentials] => Array
+                                                                                        (
+                                                                                            [key] => 1
+                                                                                            [secret] => 1
+                                                                                        )
+
+                                                                                )
+
+                                                                            [key] => 1
+                                                                            [secret] => 1
+                                                                            [username] => 1
+                                                                            [password] => 1
+                                                                            [user] => Array
+                                                                                (
+                                                                                    [name] => 1
+                                                                                    [password] => 1
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                            [objectstore_multibucket] => Array
+                                                                (
+                                                                    [arguments] => Array
+                                                                        (
+                                                                            [options] => Array
+                                                                                (
+                                                                                    [credentials] => Array
+                                                                                        (
+                                                                                            [key] => 1
+                                                                                            [secret] => 1
+                                                                                        )
+
+                                                                                )
+
+                                                                            [key] => 1
+                                                                            [secret] => 1
+                                                                            [username] => 1
+                                                                            [password] => 1
+                                                                            [user] => Array
+                                                                                (
+                                                                                    [name] => 1
+                                                                                    [password] => 1
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                            [onlyoffice] => Array
+                                                                (
+                                                                    [jwt_secret] => 1
+                                                                )
+
+                                                        )
+
+                                                    [config:OC\\SystemConfig:private] => OC\\Config Object
+                                                        (
+                                                            [cache:protected] => Array
+                                                                (
+                                                                    [htaccess.RewriteBase] => /
+                                                                    [memcache.local] => \\OC\\Memcache\\APCu
+                                                                    [apps_paths] => Array
+                                                                        (
+                                                                            [0] => Array
+                                                                                (
+                                                                                    [path] => /var/www/html/apps
+                                                                                    [url] => /apps
+                                                                                    [writable] => 
+                                                                                )
+
+                                                                            [1] => Array
+                                                                                (
+                                                                                    [path] => /var/www/html/custom_apps
+                                                                                    [url] => /custom_apps
+                                                                                    [writable] => 1
+                                                                                )
+
+                                                                        )
+
+                                                                    [upgrade.disable-web] => 1
+                                                                    [passwordsalt] => vTtdPiLF5mxWWyNTVNbMrhBTE4rI3k
+                                                                    [secret] => MIOTZa6oerl0vEQFEEKeQ0fWwMGDN2lb7cW6Yb1l3blYwmC9
+                                                                    [trusted_domains] => Array
+                                                                        (
+                                                                            [0] => localhost
+                                                                        )
+
+                                                                    [datadirectory] => /var/www/html/data
+                                                                    [dbtype] => mysql
+                                                                    [version] => 29.0.1.1
+                                                                    [overwrite.cli.url] => http://localhost
+                                                                    [dbname] => nextcloud
+                                                                    [dbhost] => mariadb-nc-1
+                                                                    [dbport] => 
+                                                                    [dbtableprefix] => oc_
+                                                                    [loglevel] => 0
+                                                                    [trusted_proxies] => Array
+                                                                        (
+                                                                            [0] => 10.1.0.180
+                                                                        )
+
+                                                                    [overwritehost] => nc-1.nl
+                                                                    [overwriteprotocol] => https
+                                                                    [mysql.utf8mb4] => 1
+                                                                    [dbuser] => nextcloud
+                                                                    [dbpassword] => nextcloud
+                                                                    [installed] => 1
+                                                                    [instanceid] => oc0cys0f28e0
+                                                                )
+
+                                                            [envCache:protected] => Array
+                                                                (
+                                                                    [HOSTNAME] => da5fe9de4559
+                                                                    [PHP_VERSION] => 8.2.20
+                                                                    [APACHE_CONFDIR] => /etc/apache2
+                                                                    [NEXTCLOUD_VERSION] => 29.0.1
+                                                                    [PHP_INI_DIR] => /usr/local/etc/php
+                                                                    [GPG_KEYS] => 39B641343D8C104B2B146DC3F9C39DC0B9698544 E60913E4DF209907D8E30D96659A97C9CF2A795A 1198C0117593497A5EC5C199286AF1F9897469DC
+                                                                    [PHP_LDFLAGS] => -Wl,-O1 -pie
+                                                                    [ADMIN_PASS] => passw
+                                                                    [PWD] => /var/www/html
+                                                                    [APACHE_LOG_DIR] => /var/log/apache2
+                                                                    [PHP_MEMORY_LIMIT] => 512M
+                                                                    [LANG] => C
+                                                                    [APACHE_BODY_LIMIT] => 1073741824
+                                                                    [PHP_SHA256] => 4474cc430febef6de7be958f2c37253e5524d5c5331a7e1765cd2d2234881e50
+                                                                    [APACHE_PID_FILE] => /var/run/apache2/apache2.pid
+                                                                    [PHPIZE_DEPS] => autoconf \t\tdpkg-dev \t\tfile \t\tg++ \t\tgcc \t\tlibc-dev \t\tmake \t\tpkg-config \t\tre2c
+                                                                    [TEST_UUID_1] => c33056f9-2abf-4a1c-98d3-b579b1db8e31
+                                                                    [TEST_UUID_2] => 5f23338a-b767-41e3-9233-1c1249444663
+                                                                    [PHP_URL] => https://www.php.net/distributions/php-8.2.20.tar.xz
+                                                                    [APACHE_RUN_GROUP] => www-data
+                                                                    [PHP_UPLOAD_LIMIT] => 512M
+                                                                    [APACHE_LOCK_DIR] => /var/lock/apache2
+                                                                    [SHLVL] => 0
+                                                                    [PHP_CFLAGS] => -fstack-protector-strong -fpic -fpie -O2 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
+                                                                    [APACHE_RUN_DIR] => /var/run/apache2
+                                                                    [APACHE_ENVVARS] => /etc/apache2/envvars
+                                                                    [APACHE_RUN_USER] => www-data
+                                                                    [PATH] => /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+                                                                    [DEBUG] => true
+                                                                    [PHP_ASC_URL] => https://www.php.net/distributions/php-8.2.20.tar.xz.asc
+                                                                    [PHP_CPPFLAGS] => -fstack-protector-strong -fpic -fpie -O2 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
+                                                                )
+
+                                                            [configDir:protected] => /var/www/html/config/
+                                                            [configFilePath:protected] => /var/www/html/config/config.php
+                                                            [configFileName:protected] => config.php
+                                                            [isReadOnly:protected] => 
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                            [passphrase:protected] => 7Lalvsix5wllH+C7lDO0mKdJdb95ZSGDlV1r4msAD6h1r1ULWTaUT3l0cl0jsIjj80MYVlbDIz8K59vNDYvgkMeSi0+nwrGDgA1C926gsF6L4QcF2PC1aMBzoXmdir9v
+                            [sessionValues:protected] => Array
+                                (
+                                    [LAST_ACTIVITY] => 1718637660
+                                    [requesttoken] => SqFb8pQbZpHstA0N82m9OES/DcIqknKp
+                                    [checkServer_succeeded] => 1
+                                )
+
+                            [isModified:protected] => 
+                        )
+
+                )
+
+            [csrfToken:OC\\Security\\CSRF\\CsrfTokenManager:private] => OC\\Security\\CSRF\\CsrfToken Object
+                (
+                    [encryptedValue:OC\\Security\\CSRF\\CsrfToken:private] => Iq5Wua3TezVXBiWoVR5lkvpMEsvmpDJhOSWA1FDBSEE=:cd8Q25WjKlcNdm3bIV9V3MJ+f/Kp4WFOfUbJpTuvAzE=
+                    [value:OC\\Security\\CSRF\\CsrfToken:private] => SqFb8pQbZpHstA0N82m9OES/DcIqknKp
+                )
+
+            [tokenGenerator:OC\\Security\\CSRF\\CsrfTokenManager:private] => OC\\Security\\CSRF\\CsrfTokenGenerator Object
+                (
+                    [random:OC\\Security\\CSRF\\CsrfTokenGenerator:private] => OC\\Security\\SecureRandom Object
+                        (
+                        )
+
+                )
+
+        )
+
+    [contentDecoded:protected] => 
+)

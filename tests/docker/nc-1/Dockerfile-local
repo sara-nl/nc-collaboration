@@ -1,0 +1,27 @@
+FROM nextcloud:29.0.1 as builder
+
+RUN apt update \
+    && apt install -y git make nano
+
+# it needs the certs from all mesh hosts
+COPY tests/docker/nc-1/nc-1.nl/certs/cert.pem /usr/share/ca-certificates/rd-mesh/nc-1.pem
+RUN echo 'rd-mesh/nc-1.pem' >> /etc/ca-certificates.conf \
+    && update-ca-certificates \
+    && export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+
+# Add the Invitation app from local source
+RUN mkdir -p /tmp/invitation
+COPY . /tmp/invitation
+
+RUN cp /tmp/invitation/tests/docker/integration-tests/Version20240209130007.php /tmp/invitation/lib/Migration
+RUN cp /tmp/invitation/tests/docker/integration-tests/OcsController.php /tmp/invitation/lib/Controller
+
+# add pre install script
+RUN cp -R /tmp/invitation/tests/docker/nc-1/before-starting.sh /docker-entrypoint-hooks.d/before-starting
+RUN chown -R www-data /docker-entrypoint-hooks.d/before-starting \
+    && chmod u+x /docker-entrypoint-hooks.d/before-starting/before-starting.sh \
+    && chown -R www-data /tmp/invitation
+
+USER www-data
+
+ENV DEBUG=true

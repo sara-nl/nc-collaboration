@@ -3,7 +3,7 @@
 namespace OCA\Invitation\Service;
 
 use Exception;
-use OCA\Invitation\AppInfo\InvitationApp;
+use OCA\Invitation\AppInfo\Application;
 use OCA\Invitation\Db\Schema;
 use OCA\Invitation\Federation\Invitation;
 use OCA\Invitation\Federation\InvitationMapper;
@@ -42,13 +42,13 @@ class InvitationService
             if ($this->userSession->getUser()->getCloudId() === $invitation->getUserCloudID()) {
                 return $invitation;
             }
-            $this->logger->debug("User with cloud id '" . $this->userSession->getUser()->getCloudId() . "' is not authorized to access invitation with id '$id'.", ['app' => InvitationApp::APP_NAME]);
+            $this->logger->debug("User with cloud id '" . $this->userSession->getUser()->getCloudId() . "' is not authorized to access invitation with id '$id'.", ['app' => Application::APP_ID]);
             throw new NotFoundException("Invitation with id=$id not found.");
         } catch (NotFoundException $e) {
-            $this->logger->debug($e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => InvitationApp::APP_NAME]);
+            $this->logger->debug($e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => Application::APP_ID]);
             throw new NotFoundException("Invitation with id=$id not found.");
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => InvitationApp::APP_NAME]);
+            $this->logger->error($e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => Application::APP_ID]);
             throw new NotFoundException("Invitation with id=$id not found.");
         }
     }
@@ -68,7 +68,7 @@ class InvitationService
         try {
             $invitation = $this->mapper->findByToken($token);
         } catch (NotFoundException $e) {
-            $this->logger->error("Invitation not found for token '$token'.", ['app' => InvitationApp::APP_NAME]);
+            $this->logger->error("Invitation not found for token '$token'.", ['app' => Application::APP_ID]);
             throw new NotFoundException("An exception occurred trying to retrieve the invitation with token '$token'.");
         }
         if ($loginRequired == true && $this->userSession->getUser() == null) {
@@ -95,7 +95,7 @@ class InvitationService
         try {
             return $this->mapper->findAll($criteria);
         } catch (Exception $e) {
-            $this->logger->error('findAll failed with error: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => InvitationApp::APP_NAME]);
+            $this->logger->error('findAll failed with error: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => Application::APP_ID]);
             throw new ServiceException('Failed to find all invitations for the specified criteria.');
         }
     }
@@ -112,7 +112,7 @@ class InvitationService
         try {
             return $this->mapper->insert($invitation);
         } catch (Exception $e) {
-            $this->logger->error('Message: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => InvitationApp::APP_NAME]);
+            $this->logger->error('Message: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => Application::APP_ID]);
             throw new ServiceException('Error inserting the invitation.');
         }
     }
@@ -128,7 +128,7 @@ class InvitationService
     {
         if ($loginRequired === true) {
             if ($this->userSession->getUser() == null) {
-                $this->logger->debug('Unable to update invitation, unauthenticated.', ['app' => InvitationApp::APP_NAME]);
+                $this->logger->debug('Unable to update invitation, unauthenticated.', ['app' => Application::APP_ID]);
                 return false;
             }
             return $this->mapper->updateInvitation($fieldsAndValues, $this->userSession->getUser()->getCloudId());

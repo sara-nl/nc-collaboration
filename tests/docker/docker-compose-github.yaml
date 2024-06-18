@@ -1,0 +1,92 @@
+version: '3.7'
+
+services:
+  integration-tests:
+    build:
+      context: .
+      dockerfile: integration-tests/Dockerfile
+    container_name: integration-tests
+    depends_on:
+      - nginx-proxy
+    environment:
+      - TEST_UUID_1=${TEST_UUID_1}
+      - TEST_UUID_2=${TEST_UUID_2}
+      - ADMIN_PASS=${ADMIN_PASS}
+    extra_hosts:
+      - 'nc-1.nl:10.1.0.160' # this will add this mapping to /etc/hosts
+    networks:
+      static-network:
+        ipv4_address: 10.1.0.190
+
+  # nexcloud nc-1
+  nc-1:
+    build:
+      context: .
+      dockerfile: nc-1/Dockerfile-github
+      args:
+        - BRANCH=${BRANCH}
+    container_name: nc-1
+    restart: unless-stopped
+    depends_on:
+      - mariadb-nc-1
+    environment:
+      - TEST_UUID_1=${TEST_UUID_1}
+      - TEST_UUID_2=${TEST_UUID_2}
+      - ADMIN_PASS=${ADMIN_PASS}
+    extra_hosts:
+      - 'nc-1.nl:10.1.0.160' # this will add this mapping to /etc/hosts
+    volumes:
+      - files-nc-1:/mnt/data
+    networks:
+      static-network:
+        ipv4_address: 10.1.0.100
+
+  mariadb-nc-1:
+    image: mariadb:10.9 # minimum required ownCloud version is 10.9
+    container_name: mariadb-nc-1
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=nextcloud
+      - MYSQL_DATABASE=nextcloud
+    command: ["--max-allowed-packet=128M", "--innodb-log-file-size=64M"]
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-u", "root", "--password=nextcloud"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - mysql-nc-1:/var/lib/mysql
+    networks:
+      static-network:
+        ipv4_address: 10.1.0.110
+
+  # The reverse mesh proxy with TLS
+  nginx-proxy:
+    build:
+      context: .
+      dockerfile: nginx-proxy/Dockerfile
+    container_name: nginx-proxy
+    depends_on:
+      - nc-1
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      static-network:
+        ipv4_address: 10.1.0.160
+
+volumes:
+  files-nc-1:
+      driver: local
+  mysql-nc-1:
+      driver: local
+
+networks:
+  static-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.1.0.0/24

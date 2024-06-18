@@ -28,9 +28,12 @@ return [
         'note' => ['url' => '/notes'],
         'note_api' => ['url' => '/api/0.1/notes']
     ],
+    'ocs' => [
+        ['root' => '/invitation', 'name' => 'ocs#find_by_token',  'url' => '/invitations/{token}', 'verb' => 'GET'],
+    ],
     'routes' => [
         // bespoke API - invitation
-        ['name' => 'invitation#index',                      'url' => '/index', 'verb' => 'GET'],
+        // ['name' => 'invitation#index',                      'url' => '/index', 'verb' => 'GET'],
         ['name' => 'invitation#find_by_token',              'url' => '/invitations/{token}', 'verb' => 'GET'],
         ['name' => 'invitation#find',                       'url' => '/invitations', 'verb' => 'GET'],
 

@@ -16,6 +16,8 @@ class Application extends App implements IBootstrap
 {
     public const APP_ID = 'invitation';
 
+    public const CONFIG_ALLOW_SHARING_WITH_INVITED_USERS_ONLY = 'allow_sharing_with_invited_users_only';
+
     public function __construct()
     {
         parent::__construct(self::APP_ID);
