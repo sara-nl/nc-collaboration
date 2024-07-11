@@ -9,8 +9,9 @@ services:
     depends_on:
       - nginx-proxy
     environment:
-      - TEST_UUID_1=${TEST_UUID_1}
-      - TEST_UUID_2=${TEST_UUID_2}
+      - TOKEN_ACCEPTED_INVITATION=${TOKEN_ACCEPTED_INVITATION}
+      - TOKEN_OPEN_SENT_INVITATION=${TOKEN_OPEN_SENT_INVITATION}
+      - TOKEN_OPEN_RECEIVED_INVITATION=${TOKEN_OPEN_RECEIVED_INVITATION}
       - ADMIN_PASS=${ADMIN_PASS}
     extra_hosts:
       - 'nc-1.nl:10.1.0.160' # this will add this mapping to /etc/hosts
@@ -30,8 +31,9 @@ services:
     depends_on:
       - mariadb-nc-1
     environment:
-      - TEST_UUID_1=${TEST_UUID_1}
-      - TEST_UUID_2=${TEST_UUID_2}
+      - TOKEN_ACCEPTED_INVITATION=${TOKEN_ACCEPTED_INVITATION}
+      - TOKEN_OPEN_SENT_INVITATION=${TOKEN_OPEN_SENT_INVITATION}
+      - TOKEN_OPEN_RECEIVED_INVITATION=${TOKEN_OPEN_RECEIVED_INVITATION}
       - ADMIN_PASS=${ADMIN_PASS}
     extra_hosts:
       - 'nc-1.nl:10.1.0.160' # this will add this mapping to /etc/hosts

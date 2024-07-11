@@ -14,7 +14,6 @@ use Psr\Log\LoggerInterface;
  */
 class Version20231130125300 extends SimpleMigrationStep
 {
-
     /** @var IDBConnection */
     private $dbc;
     /** @var LoggerInterface */

@@ -18,6 +18,8 @@ class Application extends App implements IBootstrap
 
     public const CONFIG_ALLOW_SHARING_WITH_INVITED_USERS_ONLY = 'allow_sharing_with_invited_users_only';
 
+    public const INVITATION_EMAIL_SUBJECT = 'INVITATION_EMAIL_SUBJECT';
+
     public function __construct()
     {
         parent::__construct(self::APP_ID);

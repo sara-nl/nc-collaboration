@@ -4,6 +4,7 @@ namespace OCA\Invitation\Migration;
 
 use OC\Accounts\AccountManager;
 use OCA\Invitation\Db\Schema;
+use OCA\Invitation\Federation\Invitation;
 use OCP\Accounts\IAccountManager;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\DB\ISchemaWrapper;
@@ -49,8 +50,6 @@ class Version20240209130007 extends SimpleMigrationStep
      */
     public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options)
     {
-        $prefix = $options['tablePrefix'];
-
         /**
          * @var ISchemaWrapper $schema
          */
@@ -88,10 +87,10 @@ class Version20240209130007 extends SimpleMigrationStep
         ]);
         $qb->executeStatement();
 
-        // add some invitations
+        // create an accepted invitation on nc-1
         $qb->insert(Schema::TABLE_INVITATIONS)->values([
             Schema::INVITATION_USER_CLOUD_ID => $qb->createNamedParameter('admin@nc-1.nl'),
-            Schema::INVITATION_TOKEN => $qb->createNamedParameter(getenv('TEST_UUID_1')),
+            Schema::INVITATION_TOKEN => $qb->createNamedParameter(getenv('TOKEN_ACCEPTED_INVITATION')),
             Schema::INVITATION_PROVIDER_ENDPOINT => $qb->createNamedParameter('https://nc-1.nl/apps/invitation'),
             Schema::INVITATION_RECIPIENT_ENDPOINT => $qb->createNamedParameter('https://nc-2.nl/apps/invitation'),
             Schema::INVITATION_SENDER_CLOUD_ID => $qb->createNamedParameter('admin@nc-1.nl'),
@@ -100,23 +99,35 @@ class Version20240209130007 extends SimpleMigrationStep
             Schema::INVITATION_RECIPIENT_CLOUD_ID => $qb->createNamedParameter('lex@nc-2.nl'),
             Schema::INVITATION_RECIPIENT_EMAIL => $qb->createNamedParameter('lex@mail.nc-2-academy.nl'),
             Schema::INVITATION_RECIPIENT_NAME => $qb->createNamedParameter('Lex Lexington'),
-            Schema::INVITATION_TIMESTAMP => $qb->createNamedParameter(1713528254, IQueryBuilder::PARAM_INT),
-            Schema::INVITATION_STATUS => $qb->createNamedParameter('withdrawn'),
+            Schema::INVITATION_TIMESTAMP => $qb->createNamedParameter(time(), IQueryBuilder::PARAM_INT),
+            Schema::INVITATION_STATUS => $qb->createNamedParameter(Invitation::STATUS_ACCEPTED),
         ]);
         $qb->executeStatement();
+        // create an open (sent) invitation on nc-1
         $qb->insert(Schema::TABLE_INVITATIONS)->values([
             Schema::INVITATION_USER_CLOUD_ID => $qb->createNamedParameter('admin@nc-1.nl'),
-            Schema::INVITATION_TOKEN => $qb->createNamedParameter(getenv('TEST_UUID_2')),
+            Schema::INVITATION_TOKEN => $qb->createNamedParameter(getenv('TOKEN_OPEN_SENT_INVITATION')),
+            Schema::INVITATION_PROVIDER_ENDPOINT => $qb->createNamedParameter('https://nc-1.nl/apps/invitation'),
+            Schema::INVITATION_SENDER_CLOUD_ID => $qb->createNamedParameter('admin@nc-1.nl'),
+            Schema::INVITATION_SENDER_EMAIL => $qb->createNamedParameter('admin@mail.nc-1-university.nl'),
+            Schema::INVITATION_SENDER_NAME => $qb->createNamedParameter('A. Dmin'),
+            Schema::INVITATION_RECIPIENT_EMAIL => $qb->createNamedParameter('ronnie@nc-2.nl'),
+            Schema::INVITATION_TIMESTAMP => $qb->createNamedParameter(time(), IQueryBuilder::PARAM_INT),
+            Schema::INVITATION_STATUS => $qb->createNamedParameter(Invitation::STATUS_OPEN),
+        ]);
+        $qb->executeStatement();
+        // create an open (received) invitation on nc-1
+        $qb->insert(Schema::TABLE_INVITATIONS)->values([
+            Schema::INVITATION_USER_CLOUD_ID => $qb->createNamedParameter('admin@nc-1.nl'),
+            Schema::INVITATION_TOKEN => $qb->createNamedParameter(getenv('TOKEN_OPEN_RECEIVED_INVITATION')),
             Schema::INVITATION_PROVIDER_ENDPOINT => $qb->createNamedParameter('https://nc-2.nl/apps/invitation'),
-            Schema::INVITATION_RECIPIENT_ENDPOINT => $qb->createNamedParameter('https://nc-1.nl/apps/invitation'),
-            Schema::INVITATION_SENDER_CLOUD_ID => $qb->createNamedParameter('admin@nc-2.nl'),
-            Schema::INVITATION_SENDER_EMAIL => $qb->createNamedParameter('admin@mail.nc-2-university.nl'),
             Schema::INVITATION_SENDER_NAME => $qb->createNamedParameter('A. Dmin'),
             Schema::INVITATION_RECIPIENT_CLOUD_ID => $qb->createNamedParameter('admin@nc-1.nl'),
-            Schema::INVITATION_RECIPIENT_EMAIL => $qb->createNamedParameter('admin@nc-1.nl'),
-            Schema::INVITATION_RECIPIENT_NAME => $qb->createNamedParameter('Admin'),
-            Schema::INVITATION_TIMESTAMP => $qb->createNamedParameter(1713528678, IQueryBuilder::PARAM_INT),
-            Schema::INVITATION_STATUS => $qb->createNamedParameter('accepted'),
+            Schema::INVITATION_RECIPIENT_ENDPOINT => $qb->createNamedParameter('https://nc-1.nl/apps/invitation'),
+            Schema::INVITATION_RECIPIENT_NAME => $qb->createNamedParameter('Jimmie Bo Horn'),
+            Schema::INVITATION_RECIPIENT_EMAIL => $qb->createNamedParameter('jimmie@nc-1.nl'),
+            Schema::INVITATION_TIMESTAMP => $qb->createNamedParameter(time(), IQueryBuilder::PARAM_INT),
+            Schema::INVITATION_STATUS => $qb->createNamedParameter(Invitation::STATUS_OPEN),
         ]);
         $qb->executeStatement();
         return $schema;

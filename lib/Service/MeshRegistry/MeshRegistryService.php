@@ -11,18 +11,19 @@ use Exception;
 use OCA\Invitation\AppInfo\Application;
 use OCA\Invitation\Db\Schema;
 use OCA\Invitation\Federation\InvitationServiceProvider;
+use OCA\Invitation\Federation\InvitationServiceProviderMapper;
 use OCA\Invitation\Service\ApplicationConfigurationException;
 use OCA\Invitation\Service\NotFoundException;
 use OCA\Invitation\Service\ServiceException;
 use OCP\IConfig;
-use OCP\ILogger;
+use Psr\Log\LoggerInterface;
 
 class MeshRegistryService
 {
     private string $appName;
     private IConfig $config;
     private InvitationServiceProviderMapper $invitationServiceProviderMapper;
-    private ILogger $logger;
+    private LoggerInterface $logger;
 
     private const ENDPOINT_FORWARD_INVITE = '/registry/forward-invite';
     public const ENDPOINT_GET_INVITE = '/invite';
@@ -48,12 +49,12 @@ class MeshRegistryService
     public const PARAM_NAME_NAME = 'name';
 
 
-    public function __construct($appName, IConfig $config, InvitationServiceProviderMapper $invitationServiceProviderMapper)
+    public function __construct($appName, IConfig $config, InvitationServiceProviderMapper $invitationServiceProviderMapper, LoggerInterface $logger)
     {
         $this->appName = $appName;
         $this->config = $config;
         $this->invitationServiceProviderMapper = $invitationServiceProviderMapper;
-        $this->logger = \OC::$server->getLogger();
+        $this->logger = $logger;
     }
 
     /**
@@ -103,7 +104,7 @@ class MeshRegistryService
     }
 
     /**
-     * Returns the full 'https://{invitation_service_provider}/invite-accepted' endpoint URL of this EFSS instance.
+     * Returns the full 'https://{invitation_service_provider}/ocm/invite-accepted' endpoint URL of this EFSS instance.
      *
      * @param string $senderHost the host of the sender of the invitation
      * @return string the full /invite-accepted endpoint URL
@@ -111,7 +112,7 @@ class MeshRegistryService
     public function getFullInviteAcceptedEndpointURL(string $senderInvitationServiceProviderEndpoint = ""): string
     {
         if ($senderInvitationServiceProviderEndpoint == "") {
-            return ['error' => "unable to build full '/invite-accepted' endpoint URL, sender invitation service provider endpoint not specified"];
+            return ['error' => "unable to build full '/ocm/invite-accepted' endpoint URL, sender invitation service provider endpoint not specified"];
         }
         $endpoint = trim(trim($senderInvitationServiceProviderEndpoint), '/');
         $inviteAcceptedEndpoint = trim(trim(self::ENDPOINT_INVITE_ACCEPTED), "/");

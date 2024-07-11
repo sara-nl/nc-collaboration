@@ -193,7 +193,6 @@ buildapp-tests:
 	ln -s ../ $(app_name) && \
 	tar cvzfh $(appstore_package_name).tar.gz \
 	--exclude="$(app_name)/build" \
-	--exclude="$(app_name)/Makefile" \
 	--exclude="$(app_name)/*.log" \
 	--exclude="$(app_name)/js/node_modules" \
 	--exclude="$(app_name)/js/tests" \

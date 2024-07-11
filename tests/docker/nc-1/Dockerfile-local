@@ -13,13 +13,18 @@ RUN echo 'rd-mesh/nc-1.pem' >> /etc/ca-certificates.conf \
 RUN mkdir -p /tmp/invitation
 COPY . /tmp/invitation
 
-RUN cp /tmp/invitation/tests/docker/integration-tests/Version20240209130007.php /tmp/invitation/lib/Migration
-RUN cp /tmp/invitation/tests/docker/integration-tests/OcsController.php /tmp/invitation/lib/Controller
+# Add test run requirements: test data, test controller, test routes
+RUN cp /tmp/invitation/tests/docker/integration-tests/Version20240209130007.php /tmp/invitation/lib/Migration \
+    && cp /tmp/invitation/tests/docker/integration-tests/OcsController.php /tmp/invitation/lib/Controller \
+    && mv /tmp/invitation/appinfo/routes.php /tmp/invitation/appinfo/app-routes.php \
+    && cp /tmp/invitation/tests/docker/integration-tests/routes.php /tmp/invitation/appinfo/routes.php
 
-# add pre install script
+# add pre install script and make invitation app
 RUN cp -R /tmp/invitation/tests/docker/nc-1/before-starting.sh /docker-entrypoint-hooks.d/before-starting
 RUN chown -R www-data /docker-entrypoint-hooks.d/before-starting \
     && chmod u+x /docker-entrypoint-hooks.d/before-starting/before-starting.sh \
+    && cd /tmp/invitation \
+    && make -e version=test buildapp-tests \
     && chown -R www-data /tmp/invitation
 
 USER www-data

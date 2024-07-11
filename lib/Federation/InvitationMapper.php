@@ -50,7 +50,7 @@ class InvitationMapper extends QBMapper
      * @return VInvitation
      * @throws NotFoundException
      */
-    public function findByToken(string $token)
+    public function getByToken(string $token)
     {
         try {
             $qb = $this->db->getQueryBuilder();
@@ -86,6 +86,7 @@ class InvitationMapper extends QBMapper
      */
     public function findAll(array $criteria): array
     {
+        $this->logger->debug(print_r($criteria, true));
         $qb = $this->db->getQueryBuilder();
         $qb->automaticTablePrefix(false);
         $query = $qb->select('*')->from(Schema::VIEW_INVITATIONS, 'i');
@@ -94,7 +95,7 @@ class InvitationMapper extends QBMapper
             if ($i == 0) {
                 $or = $qb->expr()->orX();
                 foreach ($values as $value) {
-                    $or->add($qb->expr()->eq("i.status", $qb->createNamedParameter($value)));
+                    $or->add($qb->expr()->eq("i.$field", $qb->createNamedParameter($value)));
                 }
                 $query->where($or);
             } else {
@@ -106,6 +107,7 @@ class InvitationMapper extends QBMapper
             }
             ++$i;
         }
+        $this->logger->debug($query->getSQL());
         $query->addOrderBy(Schema::INVITATION_TIMESTAMP, 'DESC');
 
         return $this->getVInvitations($query->executeQuery()->fetchAll());
@@ -136,7 +138,8 @@ class InvitationMapper extends QBMapper
                     $andWhere->add($qb->expr()->eq('i.' . Schema::INVITATION_USER_CLOUD_ID, $qb->createNamedParameter($userCloudID)));
                 }
                 $updateQuery->where($andWhere);
-                $result = $updateQuery->executeQuery();
+                $this->logger->debug($updateQuery->getSQL());
+                $result = $updateQuery->executeStatement();
                 if ($result === 1) {
                     return true;
                 }

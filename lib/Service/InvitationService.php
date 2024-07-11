@@ -57,25 +57,25 @@ class InvitationService
      * Returns the invitation with the specified token.
      *
      * @param string $token
-     * @param bool $loginRequired true if we need session user access check, default is true
+     * @param bool $protected true if we need session user access check, default is true
      * @return VInvitation
      * @throws NotFoundException in case the invitation could not be found
      * @throws ServiceException in case of error
      */
-    public function findByToken(string $token, bool $loginRequired = true): VInvitation
+    public function getByToken(string $token, bool $protected = true): VInvitation
     {
         $invitation = null;
         try {
-            $invitation = $this->mapper->findByToken($token);
+            $invitation = $this->mapper->getByToken($token);
         } catch (NotFoundException $e) {
             $this->logger->error("Invitation not found for token '$token'.", ['app' => Application::APP_ID]);
             throw new NotFoundException("An exception occurred trying to retrieve the invitation with token '$token'.");
         }
-        if ($loginRequired == true && $this->userSession->getUser() == null) {
+        if ($protected == true && $this->userSession->getUser() == null) {
             throw new ServiceException("Unable to find invitation, unauthenticated.");
         }
         if (
-            $loginRequired == false
+            $protected == false
             || $this->userSession->getUser()->getCloudId() === $invitation->getUserCloudID()
         ) {
             return $invitation;
@@ -90,9 +90,13 @@ class InvitationService
      * @return array
      * @throws ServiceException
      */
-    public function findAll(array $criteria): array
+    public function findAll(array $criteria, bool $protected = true): array
     {
         try {
+            // add access restriction
+            if ($protected) {
+                $criteria[Schema::VINVITATION_USER_CLOUD_ID] = [$this->userSession->getUser()->getCloudId()];
+            }
             return $this->mapper->findAll($criteria);
         } catch (Exception $e) {
             $this->logger->error('findAll failed with error: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => Application::APP_ID]);
@@ -121,12 +125,12 @@ class InvitationService
      * Updates the invitation according to the specified fields and values.
      *
      * @param array $fieldsAndValues one of which must be the token
-     * @param bool $loginRequired true if we need session user access check, default is true
+     * @param bool $protected true if we need session user access check, default is true
      * @return bool true if update succeeded, otherwise false
      */
-    public function update(array $fieldsAndValues, bool $loginRequired = true): bool
+    public function update(array $fieldsAndValues, bool $protected = true): bool
     {
-        if ($loginRequired === true) {
+        if ($protected === true) {
             if ($this->userSession->getUser() == null) {
                 $this->logger->debug('Unable to update invitation, unauthenticated.', ['app' => Application::APP_ID]);
                 return false;

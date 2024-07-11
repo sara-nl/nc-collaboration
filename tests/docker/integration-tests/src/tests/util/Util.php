@@ -42,4 +42,15 @@ class Util
         }
         return $ar;
     }
+
+    public static function getAuthToken(string $host, string $user, string $pass): string
+    {
+        $url =  "{$host}/ocs/v2.php/core/getapppassword";
+        $httpClient = new HttpClient();
+        // OCS spec: token should be base64 encoded [user]:[passwd] string
+        $basicAuthToken = base64_encode("{$user}:{$pass}");
+        $headers = ["OCS-APIRequest: true"];
+        $response = $httpClient->curlGet($url, $basicAuthToken, "", $headers);
+        return $response['apppassword'];
+    }
 }

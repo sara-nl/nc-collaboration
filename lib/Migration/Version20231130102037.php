@@ -115,7 +115,7 @@ class Version20231130102037 extends SimpleMigrationStep
             $table->addIndex([Schema::INVITATION_TOKEN], 'invitation_token_index');
 
             $sql = $this->dbc->getDatabasePlatform()->getCreateTableSQL($table);
-            foreach($sql as $statement) {
+            foreach ($sql as $statement) {
                 $this->logger->debug(print_r($statement, true));
             }
             $this->dbc->executeStatement($sql[0]);
@@ -153,7 +153,7 @@ class Version20231130102037 extends SimpleMigrationStep
             $table->addUniqueIndex([Schema::INVITATION_SERVICE_PROVIDER_ENDPOINT], 'endpoint_index');
 
             $sql = $this->dbc->getDatabasePlatform()->getCreateTableSQL($table);
-            foreach($sql as $statement) {
+            foreach ($sql as $statement) {
                 $this->logger->debug(print_r($statement, true));
             }
             $this->dbc->executeStatement($sql[0]);

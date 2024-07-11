@@ -4,7 +4,7 @@
 echo Start Invitation app integration tests
 echo sleeping 60s ... giving owncloud time to startup && sleep 15 &&
 
-curl -u admin:passw -H 'OCS-APIRequest: true' http://nc-1.nl/ocs/v2.php/core/getapppassword
+curl -u admin:${ADMIN_PASS} -H 'OCS-APIRequest: true' http://nc-1.nl/ocs/v2.php/core/getapppassword
 
 echo 
 echo
