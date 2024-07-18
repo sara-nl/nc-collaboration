@@ -17,7 +17,7 @@
  * Query filter, sorting, pagination, navigation parameter names are written snake case:
  *  eg. _next,
  *      _sort,
- *      timestamp_after ('_after' filter parameter name appended to parameter (resource property) name)
+ *      timestamp_after (the '_after' filter parameter name is appended to the parameter (resource property) name)
  *
  */
 

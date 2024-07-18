@@ -49,7 +49,40 @@ appstore_package_name=$(appstore_build_directory)/$(app_name)_$(version)
 npm=$(shell which npm 2> /dev/null)
 composer=$(shell which composer 2> /dev/null)
 
-all: build
+all: clean dev-setup build-js-production
+
+# Dev env management
+dev-setup: clean npm-init
+
+npm-init:
+	npm ci
+
+npm-update:
+	npm update
+
+# Building
+build-js:
+	npm run dev
+
+build-js-production:
+	npm run build
+
+watch-js:
+	npm run watch
+
+# Linting
+lint-fix:
+	npm run lint:fix
+
+lint-fix-watch:
+	npm run lint:fix-watch
+
+# Cleaning
+clean:
+	rm -rf dist
+
+clean-git: clean
+	git checkout -- dist
 
 # Code sniffing: PSR-12 is followed 
 # full check, gives all errors and warnings
