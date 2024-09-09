@@ -1,8 +1,8 @@
 <?php
 
-namespace OCA\Invitation\Migration;
+namespace OCA\Collaboration\Migration;
 
-use OCA\Invitation\Db\Schema;
+use OCA\Collaboration\Db\Schema;
 use OCP\DB\ISchemaWrapper;
 use OCP\DB\Types;
 use OCP\IDBConnection;
@@ -11,7 +11,7 @@ use OCP\Migration\SimpleMigrationStep;
 use Psr\Log\LoggerInterface;
 
 /**
- * Creates tables: invitation_invitations, invitation_srv_providers
+ * Creates tables: collaboration_invitations, collaboration_srv_providers
  */
 class Version20231130102037 extends SimpleMigrationStep
 {
@@ -34,7 +34,7 @@ class Version20231130102037 extends SimpleMigrationStep
      */
     public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options)
     {
-        print_r("Changing schema: create tables invitation_invitations, invitation_srv_providers\n");
+        print_r("Changing schema: create tables " . Schema::TABLE_INVITATIONS . ', ' . Schema::TABLE_COLLABORATION_SERVICE_PROVIDERS . '\n');
         /**
          * @var ISchemaWrapper $schema
          */
@@ -121,36 +121,36 @@ class Version20231130102037 extends SimpleMigrationStep
             $this->dbc->executeStatement($sql[0]);
         }
 
-        if (!$schema->hasTable("invitation_invitation_service_providers")) {
+        if (!$schema->hasTable(Schema::TABLE_COLLABORATION_SERVICE_PROVIDERS)) {
             //---------------------------------------
-            // the invitation_service_providers table
+            // the collaboration service providers table
             //---------------------------------------
-            $table = $schema->createTable(Schema::TABLE_INVITATION_SERVICE_PROVIDERS);
+            $table = $schema->createTable(Schema::TABLE_COLLABORATION_SERVICE_PROVIDERS);
             $table->addColumn(Schema::ID, Types::BIGINT, [
                 'autoincrement' => true,
                 'unsigned' => true,
                 'notnull' => true,
                 'length' => 20,
             ]);
-            $table->addColumn(Schema::INVITATION_SERVICE_PROVIDER_DOMAIN, Types::STRING, [
+            $table->addColumn(Schema::COLLABORATION_SERVICE_PROVIDER_DOMAIN, Types::STRING, [
                 'length' => 255,
                 'notnull' => true,
                 'default' => '',
             ]);
-            // the endpoint of this invitation service provider
-            $table->addColumn(Schema::INVITATION_SERVICE_PROVIDER_ENDPOINT, Types::STRING, [
+            // the endpoint of this collaboration service provider
+            $table->addColumn(Schema::COLLABORATION_SERVICE_PROVIDER_ENDPOINT, Types::STRING, [
                 'length' => 255,
                 'notnull' => true,
                 'default' => '',
             ]);
-            // the endpoint of this invitation service provider
-            $table->addColumn(Schema::INVITATION_SERVICE_PROVIDER_NAME, Types::STRING, [
+            // the endpoint of this collaboration service provider
+            $table->addColumn(Schema::COLLABORATION_SERVICE_PROVIDER_NAME, Types::STRING, [
                 'length' => 255,
                 'notnull' => true,
                 'default' => '',
             ]);
-            $table->setPrimaryKey([Schema::ID], 'invitation_srv_prvdr_primindx');
-            $table->addUniqueIndex([Schema::INVITATION_SERVICE_PROVIDER_ENDPOINT], 'endpoint_index');
+            $table->setPrimaryKey([Schema::ID], 'collab_srv_prvdr_primindx');
+            $table->addUniqueIndex([Schema::COLLABORATION_SERVICE_PROVIDER_ENDPOINT], 'endpoint_index');
 
             $sql = $this->dbc->getDatabasePlatform()->getCreateTableSQL($table);
             foreach ($sql as $statement) {

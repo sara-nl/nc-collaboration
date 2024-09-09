@@ -5,18 +5,18 @@
  *
  */
 
-namespace OCA\Invitation\Controller;
+namespace OCA\Collaboration\Controller;
 
 use Exception;
-use OCA\Invitation\AppInfo\AppError;
-use OCA\Invitation\AppInfo\Application;
-use OCA\Invitation\Db\Schema;
-use OCA\Invitation\Federation\InvitationServiceProvider;
-use OCA\Invitation\HttpClient;
-use OCA\Invitation\Service\ApplicationConfigurationException;
-use OCA\Invitation\Service\MeshRegistry\MeshRegistryService;
-use OCA\Invitation\Service\NotFoundException;
-use OCA\Invitation\Service\ServiceException;
+use OCA\Collaboration\AppInfo\AppError;
+use OCA\Collaboration\AppInfo\Application;
+use OCA\Collaboration\Db\Schema;
+use OCA\Collaboration\Federation\InvitationServiceProvider;
+use OCA\Collaboration\HttpClient;
+use OCA\Collaboration\Service\ApplicationConfigurationException;
+use OCA\Collaboration\Service\MeshRegistry\MeshRegistryService;
+use OCA\Collaboration\Service\NotFoundException;
+use OCA\Collaboration\Service\ServiceException;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -260,9 +260,9 @@ class MeshRegistryController extends Controller
             $this->logger->debug(print_r($data, true));
             if ($verified === true) {
                 $invitationServiceProvider = new InvitationServiceProvider();
-                $invitationServiceProvider->setEndpoint($data[Schema::INVITATION_SERVICE_PROVIDER_ENDPOINT]);
-                $invitationServiceProvider->setDomain($data[Schema::INVITATION_SERVICE_PROVIDER_DOMAIN]);
-                $invitationServiceProvider->setName($data[Schema::INVITATION_SERVICE_PROVIDER_NAME]);
+                $invitationServiceProvider->setEndpoint($data[Schema::COLLABORATION_SERVICE_PROVIDER_ENDPOINT]);
+                $invitationServiceProvider->setDomain($data[Schema::COLLABORATION_SERVICE_PROVIDER_DOMAIN]);
+                $invitationServiceProvider->setName($data[Schema::COLLABORATION_SERVICE_PROVIDER_NAME]);
 
                 $invitationServiceProvider = $this->meshRegistryService->addInvitationServiceProvider($invitationServiceProvider);
 
@@ -307,9 +307,9 @@ class MeshRegistryController extends Controller
     {
         if (
             is_array($params)
-            && isset($params[Schema::INVITATION_SERVICE_PROVIDER_ENDPOINT])
-            && isset($params[Schema::INVITATION_SERVICE_PROVIDER_DOMAIN])
-            && isset($params[Schema::INVITATION_SERVICE_PROVIDER_NAME])
+            && isset($params[Schema::COLLABORATION_SERVICE_PROVIDER_ENDPOINT])
+            && isset($params[Schema::COLLABORATION_SERVICE_PROVIDER_DOMAIN])
+            && isset($params[Schema::COLLABORATION_SERVICE_PROVIDER_NAME])
         ) {
             return true;
         }

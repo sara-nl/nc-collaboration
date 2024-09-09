@@ -5,18 +5,18 @@
  *
  */
 
-namespace OCA\Invitation\Controller;
+namespace OCA\Collaboration\Controller;
 
 use Exception;
-use OCA\Invitation\AppInfo\AppError;
-use OCA\Invitation\AppInfo\Application;
-use OCA\Invitation\Db\Schema;
-use OCA\Invitation\Federation\Invitation;
-use OCA\Invitation\HttpClient;
-use OCA\Invitation\Service\ApplicationConfigurationException;
-use OCA\Invitation\Service\InvitationService;
-use OCA\Invitation\Service\MeshRegistry\MeshRegistryService;
-use OCA\Invitation\Service\NotFoundException;
+use OCA\Collaboration\AppInfo\AppError;
+use OCA\Collaboration\AppInfo\Application;
+use OCA\Collaboration\Db\Schema;
+use OCA\Collaboration\Federation\Invitation;
+use OCA\Collaboration\HttpClient;
+use OCA\Collaboration\Service\ApplicationConfigurationException;
+use OCA\Collaboration\Service\InvitationService;
+use OCA\Collaboration\Service\MeshRegistry\MeshRegistryService;
+use OCA\Collaboration\Service\NotFoundException;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -586,7 +586,7 @@ class InvitationController extends Controller
      */
     private function getMailBody(string $inviteLink, string $recipientName, string $message, string $targetTemplate = 'html', string $languageCode = '')
     {
-        $tmpl = new Template('invitation', "mail/$targetTemplate", '', false, $languageCode);
+        $tmpl = new Template(Application::APP_ID, "mail/$targetTemplate", '', false, $languageCode);
         $tmpl->assign('recipientName', $recipientName);
         $tmpl->assign('fromName', $this->session->getUser()->getDisplayName());
         $tmpl->assign('inviteLink', $inviteLink);

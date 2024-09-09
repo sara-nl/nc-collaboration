@@ -68,8 +68,8 @@ services:
       context: .
       dockerfile: nginx-proxy/Dockerfile
     container_name: nginx-proxy
-    volumes:
-      - ~/projects/nc-invitation/tests/docker/nc-1/nc-1.nl/certs:/etc/nginx/certs/nc-1
+    # volumes:
+    #   - nc-1/nc-1.nl/certs:/etc/nginx/certs/nc-1
     depends_on:
       - nc-1
     ports:
@@ -78,6 +78,16 @@ services:
     networks:
       static-network:
         ipv4_address: 10.1.0.160
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - 8084:8080
+    networks:
+      static-network:
+        ipv4_address: 10.1.0.170
 
 volumes:
   files-nc-1:

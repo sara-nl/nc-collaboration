@@ -5,9 +5,9 @@ declare(strict_types=1);
 // SPDX-FileCopyrightText: Antoon Prins <antoon.prins@surf.nl>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-namespace OCA\Invitation\Controller;
+namespace OCA\Collaboration\Controller;
 
-use OCA\Invitation\AppInfo\Application;
+use OCA\Collaboration\AppInfo\Application;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
@@ -26,7 +26,7 @@ class PageController extends Controller
      */
     public function index(): TemplateResponse
     {
-        Util::addScript(Application::APP_ID, 'invitation-main');
+        // Util::addScript(Application::APP_ID, 'invitation-main');
 
         return new TemplateResponse(Application::APP_ID, 'main');
     }

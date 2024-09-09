@@ -12,10 +12,10 @@ then
     # add necessary config.php settings
     sed -i "/^);/i 'loglevel' => 0, 'trusted_proxies' => [0 => '10.1.0.100'], 'overwritehost' => 'nc-1.nl', 'overwriteprotocol' => 'https'" /var/www/html/config/config.php;
 
-    # Install the Invitation app
-    echo 'Install Invitation app';
-    tar xvf /tmp/invitation/build/artifacts/app/invitation_test.tar.gz -C /var/www/html/apps;
-    php /var/www/html/occ app:enable invitation;
+    # Install the Collaboration app
+    echo 'Install Collaboration app';
+    tar xvf /tmp/collaboration/build/artifacts/app/collaboration_test.tar.gz -C /var/www/html/apps;
+    php /var/www/html/occ app:enable collaboration;
 else
     echo 'Nextcloud already installed'
 fi

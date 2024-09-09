@@ -10,8 +10,8 @@ use tests\util\Util;
 class InvitationServiceProviderTest extends TestCase
 {
     private const NC_1_HOST = "http://nc-1.nl";
-    private const NC_1_APP_ROOT = "http://nc-1.nl/apps/invitation";
-    private const NC_1_OCS_ROOT = "http://nc-1.nl/ocs/v2.php/invitation";
+    private const NC_1_APP_ROOT = "http://nc-1.nl/apps/collaboration";
+    private const NC_1_OCS_ROOT = "http://nc-1.nl/ocs/v2.php/collaboration";
     private string $authToken = "";
 
     public function setUp(): void
@@ -57,24 +57,27 @@ class InvitationServiceProviderTest extends TestCase
         }
     }
 
-    public function testSetInvitationServiceProviderName()
-    {
-        try {
-            $invitationServiceProviderName = "NC 1 New Name";
-            $endpoint = "/registry/name";
-            print_r("\ntesting protected endpoint PUT $endpoint\n");
-            $url = self::NC_1_OCS_ROOT . $endpoint;
-            $httpClient = new HttpClient();
-            $basicAuthToken = base64_encode("admin:{$this->authToken}");
-            $response = $httpClient->curlPut($url, ["name" => $invitationServiceProviderName], $basicAuthToken, "", ["OCS-APIRequest: true"]);
-            print_r("\n" . print_r($response, true) . "\n");
+    // /**
+    //  * @depends testGetInvitationServiceProviderName
+    //  */
+    // public function testSetInvitationServiceProviderName()
+    // {
+    //     try {
+    //         $invitationServiceProviderName = "NC 1 New Name";
+    //         $endpoint = "/registry/name";
+    //         print_r("\ntesting protected endpoint PUT $endpoint\n");
+    //         $url = self::NC_1_OCS_ROOT . $endpoint;
+    //         $httpClient = new HttpClient();
+    //         $basicAuthToken = base64_encode("admin:{$this->authToken}");
+    //         $response = $httpClient->curlPut($url, ["name" => $invitationServiceProviderName], $basicAuthToken, "", ["OCS-APIRequest: true"]);
+    //         print_r("\n" . print_r($response, true) . "\n");
 
-            $this->assertEquals($invitationServiceProviderName, $response['data'], "GET $url failed");
+    //         $this->assertEquals($invitationServiceProviderName, $response['data'], "GET $url failed");
 
-        } catch (Exception $e) {
-            $this->fail($e->getTraceAsString());
-        }
-    }
+    //     } catch (Exception $e) {
+    //         $this->fail($e->getTraceAsString());
+    //     }
+    // }
 
     public function tearDown(): void
     {

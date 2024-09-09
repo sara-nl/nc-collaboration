@@ -2,7 +2,7 @@
 /**
  * Simply delegates all requests to the relevant controller to test the actual implementations.
  */
-namespace OCA\Invitation\Controller;
+namespace OCA\Collaboration\Controller;
 
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;

@@ -5,16 +5,16 @@
  *
  */
 
-namespace OCA\Invitation\Service\MeshRegistry;
+namespace OCA\Collaboration\Service\MeshRegistry;
 
 use Exception;
-use OCA\Invitation\AppInfo\Application;
-use OCA\Invitation\Db\Schema;
-use OCA\Invitation\Federation\InvitationServiceProvider;
-use OCA\Invitation\Federation\InvitationServiceProviderMapper;
-use OCA\Invitation\Service\ApplicationConfigurationException;
-use OCA\Invitation\Service\NotFoundException;
-use OCA\Invitation\Service\ServiceException;
+use OCA\Collaboration\AppInfo\Application;
+use OCA\Collaboration\Db\Schema;
+use OCA\Collaboration\Federation\InvitationServiceProvider;
+use OCA\Collaboration\Federation\InvitationServiceProviderMapper;
+use OCA\Collaboration\Service\ApplicationConfigurationException;
+use OCA\Collaboration\Service\NotFoundException;
+use OCA\Collaboration\Service\ServiceException;
 use OCP\IConfig;
 use Psr\Log\LoggerInterface;
 
@@ -285,7 +285,7 @@ class MeshRegistryService
             }
             foreach ($fields as $field => $value) {
                 switch ($field) {
-                    case Schema::INVITATION_SERVICE_PROVIDER_ENDPOINT:
+                    case Schema::COLLABORATION_SERVICE_PROVIDER_ENDPOINT:
                         if (is_string($value) == true) {
                             if (!$this->isEndpointValid($value)) {
                                 throw new ServiceException("Error updating invitation service provider. Endpoint invalid: $value");
@@ -295,7 +295,7 @@ class MeshRegistryService
                             $this->logger->debug("Value '$value' is of wrong type for property endpoint");
                         }
                         break;
-                    case Schema::INVITATION_SERVICE_PROVIDER_NAME:
+                    case Schema::COLLABORATION_SERVICE_PROVIDER_NAME:
                         if (is_string($value) == true) {
                             $newName = $value;
                         } else {

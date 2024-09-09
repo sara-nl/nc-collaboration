@@ -1,8 +1,10 @@
 <?php
 
-namespace OCA\Invitation\Migration;
+namespace OCA\Collaboration\Migration;
 
-use OCA\Invitation\Db\Schema;
+use OCA\Collaboration\AppInfo\Application;
+use OCA\Collaboration\Db\Schema;
+use OCP\AppFramework\App;
 use OCP\DB\ISchemaWrapper;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
@@ -39,7 +41,12 @@ class Version20231130125300 extends SimpleMigrationStep
          * @var ISchemaWrapper $schema
          */
         $schema = $schemaClosure();
+        $appID = Application::APP_ID;
         $prefix = "oc_";
+        $tableAppconfig = "appconfig";
+        $tableInvitations = Schema::TABLE_INVITATIONS;
+        $tableCollaborationServiceProviders = Schema::TABLE_COLLABORATION_SERVICE_PROVIDERS;
+
 
         print_r("Changing schema: create views " . Schema::VIEW_INVITATIONS . ", " . Schema::VIEW_REMOTEUSERS . "\n");
 
@@ -61,7 +68,7 @@ class Version20231130125300 extends SimpleMigrationStep
                 i.sender_cloud_id as sender_cloud_id, i.sender_name as sender_name, i.sender_email as sender_email, 
                 i.recipient_cloud_id as recipient_cloud_id, i.recipient_name as recipient_name, i.recipient_email as recipient_email,
                 i.recipient_cloud_id as remote_user_cloud_id, i.recipient_name as remote_user_name, i.recipient_email as remote_user_email, i.recipient_endpoint as remote_user_provider_endpoint
-                from {$prefix}invitation_invitations i
+                from {$prefix}{$tableInvitations} i
                     union all
                 select 
                 ii.id as id, ii.token as token, ii.timestamp as timestamp, ii.status as status, 
@@ -70,13 +77,13 @@ class Version20231130125300 extends SimpleMigrationStep
                 ii.sender_cloud_id as sender_cloud_id, ii.sender_name as sender_name, ii.sender_email as sender_email, 
                 ii.recipient_cloud_id as recipient_cloud_id, ii.recipient_name as recipient_name, ii.recipient_email as recipient_email,
                 ii.sender_cloud_id as remote_user_cloud_id, ii.sender_name as remote_user_name, ii.sender_email as remote_user_email, ii.provider_endpoint as remote_user_provider_endpoint
-                from {$prefix}invitation_invitations ii
+                from {$prefix}{$tableInvitations} ii
                 ) s
-                left join {$prefix}invitation_srv_providers as isp
+                left join {$prefix}{$tableCollaborationServiceProviders} as isp
                 on isp.endpoint=s.remote_user_provider_endpoint
-                join {$prefix}appconfig c
+                join {$prefix}{$tableAppconfig} c
                 on c.configvalue=s.user_provider_endpoint
-                where c.appid='invitation' and c.configkey='endpoint'
+                where c.appid='{$appID}' and c.configkey='endpoint'
                 group by s.id
                 "
         );
@@ -92,21 +99,21 @@ class Version20231130125300 extends SimpleMigrationStep
                     i.id as invitation_id, i.provider_endpoint as provider_endpoint, 
                     i.sender_cloud_id as user_cloud_id, i.sender_name as user_name, 
                     i.recipient_cloud_id as remote_user_cloud_id, i.recipient_name as remote_user_name, i.recipient_email as remote_user_email, i.recipient_endpoint as remote_provider_endpoint
-                from {$prefix}invitation_invitations i
+                from {$prefix}{$tableInvitations} i
                     where i.status='accepted'
                 union all
                 select 
                     ii.id as invitation_id, ii.recipient_endpoint as provider_endpoint, 
                     ii.recipient_cloud_id as user_cloud_id, ii.recipient_name as user_name, 
                     ii.sender_cloud_id as remote_user_cloud_id, ii.sender_name as remote_user_name, ii.sender_email as remote_user_email, ii.provider_endpoint as remote_provider_endpoint
-                from {$prefix}invitation_invitations ii
+                from {$prefix}{$tableInvitations} ii
                     where ii.status='accepted'
                 ) s
-                join {$prefix}invitation_srv_providers as isp
+                join {$prefix}{$tableCollaborationServiceProviders} as isp
                 on isp.endpoint=s.remote_provider_endpoint
-                join {$prefix}appconfig c
+                join {$prefix}{$tableAppconfig} c
                 on c.configvalue=s.provider_endpoint
-                where c.appid='invitation' and c.configkey='endpoint'
+                where c.appid='{$appID}' and c.configkey='endpoint'
                 group by s.invitation_id
                 "
         );

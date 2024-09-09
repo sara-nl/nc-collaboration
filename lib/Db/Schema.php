@@ -4,14 +4,14 @@
  * Database schema table names.
  */
 
-namespace OCA\Invitation\Db;
+namespace OCA\Collaboration\Db;
 
 class Schema
 {
     public const ID = 'id';
 
     /* Invitations table */
-    public const TABLE_INVITATIONS = 'invitation_invitations';
+    public const TABLE_INVITATIONS = 'collaboration_invitations';
 
     public const INVITATION_USER_CLOUD_ID = 'user_cloud_id';
     public const INVITATION_TOKEN = 'token';
@@ -27,7 +27,7 @@ class Schema
     public const INVITATION_STATUS = 'status';
 
     /* Invitations view */
-    public const VIEW_INVITATIONS = 'invitation_view_invitations';
+    public const VIEW_INVITATIONS = 'collaboration_view_invitations';
 
     public const VINVITATION_TOKEN = 'token';
     public const VINVITATION_TIMESTAMP = 'timestamp';
@@ -49,7 +49,7 @@ class Schema
     public const VINVITATION_REMOTE_USER_PROVIDER_NAME = 'remote_user_provider_name';
 
     /* Remote Users view */
-    public const VIEW_REMOTEUSERS = 'invitation_view_remote_users';
+    public const VIEW_REMOTEUSERS = 'collaboration_view_remote_users';
 
     public const REMOTEUSER_INVITATION_ID = 'invitation_id';
     public const REMOTEUSER_USER_CLOUD_ID = 'user_cloud_id';
@@ -61,15 +61,10 @@ class Schema
     public const REMOTEUSER_REMOTE_USER_PROVIDER_NAME = 'remote_user_provider_name';
 
     /* Invitation service providers table */
-    public const TABLE_INVITATION_SERVICE_PROVIDERS = 'invitation_srv_providers';
+    public const TABLE_COLLABORATION_SERVICE_PROVIDERS = 'collaboration_srv_providers';
 
-    public const INVITATION_SERVICE_PROVIDER_DOMAIN = 'domain';
-    public const INVITATION_SERVICE_PROVIDER_ENDPOINT = 'endpoint';
-    public const INVITATION_SERVICE_PROVIDER_NAME = 'name';
+    public const COLLABORATION_SERVICE_PROVIDER_DOMAIN = 'domain';
+    public const COLLABORATION_SERVICE_PROVIDER_ENDPOINT = 'endpoint';
+    public const COLLABORATION_SERVICE_PROVIDER_NAME = 'name';
 
-    /* Invitation constants table */
-    public const TABLE_INVITATION_CONSTANTS = "invitation_constants";
-
-    public const INVITATION_CONSTANTS_NAME = 'name';
-    public const INVITATION_CONSTANTS_VALUE = 'value';
 }

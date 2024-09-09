@@ -14,12 +14,10 @@ $appRoutes = include 'app-routes.php';
 
 $ocsRoutes = [
     'ocs' => [
-        ['root' => '/invitation', 'name' => 'ocs#invitation_get_by_token',      'url' => '/invitations/{token}', 'verb' => 'GET'],
-        ['root' => '/invitation', 'name' => 'ocs#invitation_update',            'url' => '/invitations/{token}', 'verb' => 'PUT'],
-        ['root' => '/invitation', 'name' => 'ocs#invitation_find',              'url' => '/invitations', 'verb' => 'GET'],
-        ['root' => '/invitation', 'name' => 'ocs#invitation_generate_invite',   'url' => '/invitations', 'verb' => 'POST'],
-
-        ['root' => '/invitation', 'name' => 'ocs#registry_set_name',            'url' => '/registry/name', 'verb' => 'PUT'],
+        ['root' => '/collaboration', 'name' => 'ocs#invitation_get_by_token',      'url' => '/invitations/{token}', 'verb' => 'GET'],
+        ['root' => '/collaboration', 'name' => 'ocs#invitation_update',            'url' => '/invitations/{token}', 'verb' => 'PUT'],
+        ['root' => '/collaboration', 'name' => 'ocs#invitation_find',              'url' => '/invitations', 'verb' => 'GET'],
+        ['root' => '/collaboration', 'name' => 'ocs#invitation_generate_invite',   'url' => '/invitations', 'verb' => 'POST'],
 
     ],
 ];

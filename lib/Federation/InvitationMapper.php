@@ -1,13 +1,13 @@
 <?php
 
-namespace OCA\Invitation\Federation;
+namespace OCA\Collaboration\Federation;
 
 use Exception;
-use OCA\Invitation\AppInfo\Application;
-use OCA\Invitation\Db\Schema;
-use OCA\Invitation\Federation\Invitation;
-use OCA\Invitation\Federation\VInvitation;
-use OCA\Invitation\Service\NotFoundException;
+use OCA\Collaboration\AppInfo\Application;
+use OCA\Collaboration\Db\Schema;
+use OCA\Collaboration\Federation\Invitation;
+use OCA\Collaboration\Federation\VInvitation;
+use OCA\Collaboration\Service\NotFoundException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;

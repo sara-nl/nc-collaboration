@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\Invitation;
+namespace OCA\Collaboration;
 
 use Exception;
 

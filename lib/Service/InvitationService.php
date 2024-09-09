@@ -1,13 +1,13 @@
 <?php
 
-namespace OCA\Invitation\Service;
+namespace OCA\Collaboration\Service;
 
 use Exception;
-use OCA\Invitation\AppInfo\Application;
-use OCA\Invitation\Db\Schema;
-use OCA\Invitation\Federation\Invitation;
-use OCA\Invitation\Federation\InvitationMapper;
-use OCA\Invitation\Federation\VInvitation;
+use OCA\Collaboration\AppInfo\Application;
+use OCA\Collaboration\Db\Schema;
+use OCA\Collaboration\Federation\Invitation;
+use OCA\Collaboration\Federation\InvitationMapper;
+use OCA\Collaboration\Federation\VInvitation;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 

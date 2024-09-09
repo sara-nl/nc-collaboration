@@ -1,9 +1,9 @@
 <?php
 
-namespace OCA\Invitation;
+namespace OCA\Collaboration;
 
 use Exception;
-use OCA\Invitation\AppInfo\AppError;
+use OCA\Collaboration\AppInfo\AppError;
 use Psr\Log\LoggerInterface;
 
 class HttpClient

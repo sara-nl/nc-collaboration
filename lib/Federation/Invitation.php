@@ -5,10 +5,10 @@
  *
  */
 
-namespace OCA\Invitation\Federation;
+namespace OCA\Collaboration\Federation;
 
 use JsonSerializable;
-use OCA\Invitation\Db\Schema;
+use OCA\Collaboration\Db\Schema;
 use OCP\AppFramework\Db\Entity;
 
 /**

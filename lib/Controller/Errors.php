@@ -5,10 +5,10 @@ declare(strict_types=1);
 // SPDX-FileCopyrightText: Antoon Prins <antoon.prins@surf.nl>
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-namespace OCA\Invitation\Controller;
+namespace OCA\Collaboration\Controller;
 
 use Closure;
-use OCA\Invitation\Service\NoteNotFound;
+use OCA\Collaboration\Service\NoteNotFound;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 

@@ -1,8 +1,8 @@
-# Invitation app for Federated Sharing
+# Collaboration app
 
 ---
 ### Enhanced federated sharing between Nextcloud instances.
-This app gives an enhanced federated sharing user experience by implementing an Invitation Workflow. Through a simple invitation by email to a user of another nextcloud instance the federated user (cloud) IDs are automatically exchanged and saved on each other's systems. From thereon both users can easily start federated sharing with each other via the regular file sharing dialog, because the share dialog will also search for and display invited remote users.<br><br>
+This app gives an enhanced federated sharing user experience by implementing an <i>Invitation Workflow</i>. Through a simple invitation by email to a user of another nextcloud instance the federated user (cloud) IDs are automatically exchanged and saved on each other's systems. From thereon both users can easily start federated sharing with each other via the regular file sharing dialog, because the share dialog will also search for and display invited remote users.<br><br>
 
 ---
 ### Invitation Workflow

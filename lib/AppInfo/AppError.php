@@ -4,7 +4,7 @@
  * Translatable errors that may be returned or used as exception messages.
  */
 
-namespace OCA\Invitation\AppInfo;
+namespace OCA\Collaboration\AppInfo;
 
 class AppError
 {

@@ -37,7 +37,7 @@
 #        "build": "node node_modules/gulp-cli/bin/gulp.js"
 #    },
 
-app_name=invitation
+app_name=collaboration
 # VERSION=please_set_version
 version=$(version)
 app_dir_name=$(notdir $(CURDIR))
@@ -197,6 +197,7 @@ buildapp:
 	--exclude="$(app_name)/*.log" \
 	--exclude="$(app_name)/phpunit*xml" \
 	--exclude="$(app_name)/composer.*" \
+	--exclude="$(app_name)/node_modules" \
 	--exclude="$(app_name)/js/node_modules" \
 	--exclude="$(app_name)/js/tests" \
 	--exclude="$(app_name)/js/test" \
@@ -227,6 +228,7 @@ buildapp-tests:
 	tar cvzfh $(appstore_package_name).tar.gz \
 	--exclude="$(app_name)/build" \
 	--exclude="$(app_name)/*.log" \
+	--exclude="$(app_name)/node_modules" \
 	--exclude="$(app_name)/js/node_modules" \
 	--exclude="$(app_name)/js/tests" \
 	--exclude="$(app_name)/js/test" \

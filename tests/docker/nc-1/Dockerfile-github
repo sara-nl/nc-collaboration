@@ -12,21 +12,21 @@ RUN echo 'rd-mesh/nc-1.pem' >> /etc/ca-certificates.conf \
     && export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 
 # Add the Invitation app from repository
-RUN mkdir -p /tmp/invitation \
-    && git clone -b ${BRANCH} https://github.com/sara-nl/nc-invitation.git /tmp/invitation
+RUN mkdir -p /tmp/collaboration \
+    && git clone -b ${BRANCH} https://github.com/sara-nl/nc-invitation.git /tmp/collaboration
 # Add test run requirements: test data, test controller, test routes
-RUN cp /tmp/invitation/tests/docker/integration-tests/Version20240209130007.php /tmp/invitation/lib/Migration \
-    && cp /tmp/invitation/tests/docker/integration-tests/OcsController.php /tmp/invitation/lib/Controller \
-    && mv /tmp/invitation/appinfo/routes.php /tmp/invitation/appinfo/app-routes.php \
-    && cp /tmp/invitation/tests/docker/integration-tests/routes.php /tmp/invitation/appinfo/routes.php
+RUN cp /tmp/collaboration/tests/docker/integration-tests/Version20240209130007.php /tmp/collaboration/lib/Migration \
+    && cp /tmp/collaboration/tests/docker/integration-tests/OcsController.php /tmp/collaboration/lib/Controller \
+    && mv /tmp/collaboration/appinfo/routes.php /tmp/collaboration/appinfo/app-routes.php \
+    && cp /tmp/collaboration/tests/docker/integration-tests/routes.php /tmp/collaboration/appinfo/routes.php
 
 # add pre install script and make invitation app
-RUN cp -R /tmp/invitation/tests/docker/nc-1/before-starting.sh /docker-entrypoint-hooks.d/before-starting
+RUN cp -R /tmp/collaboration/tests/docker/nc-1/before-starting.sh /docker-entrypoint-hooks.d/before-starting
 RUN chown -R www-data /docker-entrypoint-hooks.d/before-starting \
     && chmod u+x /docker-entrypoint-hooks.d/before-starting/before-starting.sh \
-    && cd /tmp/invitation \
+    && cd /tmp/collaboration \
     && make -e version=test buildapp-tests \
-    && chown -R www-data /tmp/invitation
+    && chown -R www-data /tmp/collaboration
 
 USER www-data
 

@@ -1,12 +1,11 @@
 <?php
 
-namespace OCA\Invitation\Migration;
+namespace OCA\Collaboration\Migration;
 
 use OC\Accounts\AccountManager;
-use OCA\Invitation\Db\Schema;
-use OCA\Invitation\Federation\Invitation;
+use OCA\Collaboration\Db\Schema;
+use OCA\Collaboration\Federation\Invitation;
 use OCP\Accounts\IAccountManager;
-use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\DB\ISchemaWrapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
@@ -15,9 +14,6 @@ use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 use Psr\Log\LoggerInterface;
 
-/**
- * Creates invitation_constants and inserts constants
- */
 class Version20240209130007 extends SimpleMigrationStep
 {
 
@@ -67,23 +63,23 @@ class Version20240209130007 extends SimpleMigrationStep
 
         // add this provider's endpoint
         $qb->insert("appconfig")->values([
-            'appid' => $qb->createNamedParameter('invitation'),
+            'appid' => $qb->createNamedParameter('collaboration'),
             'configkey' => $qb->createNamedParameter('endpoint'),
-            'configvalue' => $qb->createNamedParameter('https://nc-1.nl/apps/invitation'),
+            'configvalue' => $qb->createNamedParameter('https://nc-1.nl/apps/collaboration'),
         ]);
         $qb->executeStatement();
 
         // add invitation provider services
-        $qb->insert(Schema::TABLE_INVITATION_SERVICE_PROVIDERS)->values([
-            Schema::INVITATION_SERVICE_PROVIDER_DOMAIN => $qb->createNamedParameter('nc-1.nl'),
-            Schema::INVITATION_SERVICE_PROVIDER_ENDPOINT => $qb->createNamedParameter('https://nc-1.nl/apps/invitation'),
-            Schema::INVITATION_SERVICE_PROVIDER_NAME => $qb->createNamedParameter('NC 1 University'),
+        $qb->insert(Schema::TABLE_COLLABORATION_SERVICE_PROVIDERS)->values([
+            Schema::COLLABORATION_SERVICE_PROVIDER_DOMAIN => $qb->createNamedParameter('nc-1.nl'),
+            Schema::COLLABORATION_SERVICE_PROVIDER_ENDPOINT => $qb->createNamedParameter('https://nc-1.nl/apps/collaboration'),
+            Schema::COLLABORATION_SERVICE_PROVIDER_NAME => $qb->createNamedParameter('NC 1 University'),
         ]);
         $qb->executeStatement();
-        $qb->insert(Schema::TABLE_INVITATION_SERVICE_PROVIDERS)->values([
-            Schema::INVITATION_SERVICE_PROVIDER_DOMAIN => $qb->createNamedParameter('nc-2.nl'),
-            Schema::INVITATION_SERVICE_PROVIDER_ENDPOINT => $qb->createNamedParameter('https://nc-2.nl/apps/invitation'),
-            Schema::INVITATION_SERVICE_PROVIDER_NAME => $qb->createNamedParameter('NC 2 University'),
+        $qb->insert(Schema::TABLE_COLLABORATION_SERVICE_PROVIDERS)->values([
+            Schema::COLLABORATION_SERVICE_PROVIDER_DOMAIN => $qb->createNamedParameter('nc-2.nl'),
+            Schema::COLLABORATION_SERVICE_PROVIDER_ENDPOINT => $qb->createNamedParameter('https://nc-2.nl/apps/collaboration'),
+            Schema::COLLABORATION_SERVICE_PROVIDER_NAME => $qb->createNamedParameter('NC 2 University'),
         ]);
         $qb->executeStatement();
 
@@ -91,8 +87,8 @@ class Version20240209130007 extends SimpleMigrationStep
         $qb->insert(Schema::TABLE_INVITATIONS)->values([
             Schema::INVITATION_USER_CLOUD_ID => $qb->createNamedParameter('admin@nc-1.nl'),
             Schema::INVITATION_TOKEN => $qb->createNamedParameter(getenv('TOKEN_ACCEPTED_INVITATION')),
-            Schema::INVITATION_PROVIDER_ENDPOINT => $qb->createNamedParameter('https://nc-1.nl/apps/invitation'),
-            Schema::INVITATION_RECIPIENT_ENDPOINT => $qb->createNamedParameter('https://nc-2.nl/apps/invitation'),
+            Schema::INVITATION_PROVIDER_ENDPOINT => $qb->createNamedParameter('https://nc-1.nl/apps/collaboration'),
+            Schema::INVITATION_RECIPIENT_ENDPOINT => $qb->createNamedParameter('https://nc-2.nl/apps/collaboration'),
             Schema::INVITATION_SENDER_CLOUD_ID => $qb->createNamedParameter('admin@nc-1.nl'),
             Schema::INVITATION_SENDER_EMAIL => $qb->createNamedParameter('jimmie.baker@mail.nc-1-university.nl'),
             Schema::INVITATION_SENDER_NAME => $qb->createNamedParameter('Jimmie Baker'),
@@ -107,7 +103,7 @@ class Version20240209130007 extends SimpleMigrationStep
         $qb->insert(Schema::TABLE_INVITATIONS)->values([
             Schema::INVITATION_USER_CLOUD_ID => $qb->createNamedParameter('admin@nc-1.nl'),
             Schema::INVITATION_TOKEN => $qb->createNamedParameter(getenv('TOKEN_OPEN_SENT_INVITATION')),
-            Schema::INVITATION_PROVIDER_ENDPOINT => $qb->createNamedParameter('https://nc-1.nl/apps/invitation'),
+            Schema::INVITATION_PROVIDER_ENDPOINT => $qb->createNamedParameter('https://nc-1.nl/apps/collaboration'),
             Schema::INVITATION_SENDER_CLOUD_ID => $qb->createNamedParameter('admin@nc-1.nl'),
             Schema::INVITATION_SENDER_EMAIL => $qb->createNamedParameter('admin@mail.nc-1-university.nl'),
             Schema::INVITATION_SENDER_NAME => $qb->createNamedParameter('A. Dmin'),
@@ -120,10 +116,10 @@ class Version20240209130007 extends SimpleMigrationStep
         $qb->insert(Schema::TABLE_INVITATIONS)->values([
             Schema::INVITATION_USER_CLOUD_ID => $qb->createNamedParameter('admin@nc-1.nl'),
             Schema::INVITATION_TOKEN => $qb->createNamedParameter(getenv('TOKEN_OPEN_RECEIVED_INVITATION')),
-            Schema::INVITATION_PROVIDER_ENDPOINT => $qb->createNamedParameter('https://nc-2.nl/apps/invitation'),
+            Schema::INVITATION_PROVIDER_ENDPOINT => $qb->createNamedParameter('https://nc-2.nl/apps/collaboration'),
             Schema::INVITATION_SENDER_NAME => $qb->createNamedParameter('A. Dmin'),
             Schema::INVITATION_RECIPIENT_CLOUD_ID => $qb->createNamedParameter('admin@nc-1.nl'),
-            Schema::INVITATION_RECIPIENT_ENDPOINT => $qb->createNamedParameter('https://nc-1.nl/apps/invitation'),
+            Schema::INVITATION_RECIPIENT_ENDPOINT => $qb->createNamedParameter('https://nc-1.nl/apps/collaboration'),
             Schema::INVITATION_RECIPIENT_NAME => $qb->createNamedParameter('Jimmie Bo Horn'),
             Schema::INVITATION_RECIPIENT_EMAIL => $qb->createNamedParameter('jimmie@nc-1.nl'),
             Schema::INVITATION_TIMESTAMP => $qb->createNamedParameter(time(), IQueryBuilder::PARAM_INT),

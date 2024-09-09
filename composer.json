@@ -1,5 +1,5 @@
 {
-	"name": "nextcloud/invitation",
+	"name": "nextcloud/collaboration",
 	"description": "Enhanced federated sharing between EFSS instances.",
 	"type": "project",
 	"license": "AGPL-3.0-or-later",

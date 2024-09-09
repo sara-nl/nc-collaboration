@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\Invitation\Service;
+namespace OCA\Collaboration\Service;
 
 class NotFoundException extends ServiceException
 {

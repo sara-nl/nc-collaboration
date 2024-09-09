@@ -4,12 +4,12 @@
  * The invitation service provider mapper.
  */
 
-namespace OCA\Invitation\Federation;
+namespace OCA\Collaboration\Federation;
 
 use Exception;
-use OCA\Invitation\AppInfo\InvitationApp;
-use OCA\Invitation\Db\Schema;
-use OCA\Invitation\Service\NotFoundException;
+use OCA\Collaboration\AppInfo\InvitationApp;
+use OCA\Collaboration\Db\Schema;
+use OCA\Collaboration\Service\NotFoundException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\IDBConnection;
 use Psr\Log\LoggerInterface;
@@ -20,7 +20,7 @@ class InvitationServiceProviderMapper extends QBMapper
 
     public function __construct(IDBConnection $dbConnection, LoggerInterface $logger)
     {
-        parent::__construct($dbConnection, Schema::TABLE_INVITATION_SERVICE_PROVIDERS, InvitationServiceProvider::class);
+        parent::__construct($dbConnection, Schema::TABLE_COLLABORATION_SERVICE_PROVIDERS, InvitationServiceProvider::class);
         $this->logger = $logger;
     }
 
@@ -36,8 +36,8 @@ class InvitationServiceProviderMapper extends QBMapper
         try {
             $qb = $this->db->getQueryBuilder();
             $result = $qb->select('*')
-                ->from(Schema::TABLE_INVITATION_SERVICE_PROVIDERS, 'dp')
-                ->where($qb->expr()->eq('dp.' . Schema::INVITATION_SERVICE_PROVIDER_ENDPOINT, $qb->createNamedParameter($endpoint)))
+                ->from(Schema::TABLE_COLLABORATION_SERVICE_PROVIDERS, 'dp')
+                ->where($qb->expr()->eq('dp.' . Schema::COLLABORATION_SERVICE_PROVIDER_ENDPOINT, $qb->createNamedParameter($endpoint)))
                 ->executeQuery()->fetch();
             if (is_array($result)) {
                 return $this->createInvitationServiceProvider($result);
@@ -60,7 +60,7 @@ class InvitationServiceProviderMapper extends QBMapper
         try {
             $qb = $this->db->getQueryBuilder();
             $qb->select('*')
-                ->from(Schema::TABLE_INVITATION_SERVICE_PROVIDERS, 'dp');
+                ->from(Schema::TABLE_COLLABORATION_SERVICE_PROVIDERS, 'dp');
             return $this->createInvitationServiceProviders($qb->executeQuery()->fetchAll());
         } catch (Exception $e) {
             $this->logger->error($e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => InvitationApp::APP_NAME]);
@@ -78,9 +78,9 @@ class InvitationServiceProviderMapper extends QBMapper
         if (isset($associativeArray) && count($associativeArray) > 0) {
             $invitationServiceProvider = new InvitationServiceProvider();
             $invitationServiceProvider->setId($associativeArray['id']);
-            $invitationServiceProvider->setDomain($associativeArray[Schema::INVITATION_SERVICE_PROVIDER_DOMAIN]);
-            $invitationServiceProvider->setEndpoint($associativeArray[Schema::INVITATION_SERVICE_PROVIDER_ENDPOINT]);
-            $invitationServiceProvider->setName($associativeArray[Schema::INVITATION_SERVICE_PROVIDER_NAME]);
+            $invitationServiceProvider->setDomain($associativeArray[Schema::COLLABORATION_SERVICE_PROVIDER_DOMAIN]);
+            $invitationServiceProvider->setEndpoint($associativeArray[Schema::COLLABORATION_SERVICE_PROVIDER_ENDPOINT]);
+            $invitationServiceProvider->setName($associativeArray[Schema::COLLABORATION_SERVICE_PROVIDER_NAME]);
             return $invitationServiceProvider;
         }
         $this->logger->error('Unable to create a new InvitationServiceProvider from associative array: ' . print_r($associativeArray, true), ['app' => InvitationApp::APP_NAME]);
