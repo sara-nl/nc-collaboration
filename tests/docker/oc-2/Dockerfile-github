@@ -1,0 +1,42 @@
+FROM owncloud/server:latest as builder
+
+ARG BRANCH
+
+RUN apt update \
+    && apt install -y git make
+
+# it needs the certs from all mesh hosts
+COPY oc-1/oc-1.nl/certs/cert.pem /usr/share/ca-certificates/rd-mesh/oc-1.pem
+COPY oc-2/oc-2.nl/certs/cert.pem /usr/share/ca-certificates/rd-mesh/oc-2.pem
+RUN echo 'rd-mesh/oc-1.pem' >> /etc/ca-certificates.conf \
+    && echo 'rd-mesh/oc-2.pem' >> /etc/ca-certificates.conf \
+    && update-ca-certificates \
+    && export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+
+# Add the Collaboration app from branch, includes using the make buildapp-test target to simulate an actual release version
+# And install the data migration file required  for the tests
+# And install the pre start server script that activates the app
+RUN mkdir -p /tmp/collaboration \
+    && git clone -b ${BRANCH} https://github.com/sara-nl/oc-collaboration.git /tmp/collaboration
+
+RUN cd /tmp/collaboration \
+    && make -e version=test buildapp-tests \
+    && tar -xvf /tmp/collaboration/build/artifacts/app/invitation_test.tar.gz -C /var/www/owncloud/apps \
+    && cd /var/www/owncloud/apps/invitation \
+    && composer install \
+    && cp /var/www/owncloud/apps/invitation/tests/docker/integration-tests/Version20231130125302.php /var/www/owncloud/apps/invitation/appinfo/Migrations \
+    && cp /var/www/owncloud/apps/invitation/tests/docker/oc-1/10-invitation-app.sh /etc/pre_server.d \
+    && mv /var/www/owncloud/apps/invitation/appinfo/routes.php /var/www/owncloud/apps/invitation/appinfo/routes-main.php \
+    && cp /var/www/owncloud/apps/invitation/tests/docker/integration-tests/src/tests/routes.php /var/www/owncloud/apps/invitation/appinfo/routes.php \
+    && cp /var/www/owncloud/apps/invitation/tests/docker/integration-tests/src/tests/ExternalApiRoute.php /var/www/owncloud/apps/invitation/lib/ExternalApiRoute.php
+
+# RUN chown -R www-data:root /var/www/owncloud/apps/invitation \
+# RUN cp /var/www/owncloud/apps/invitation/tests/docker/oc-1/10-invitation-app.sh /etc/pre_server.d \
+#     && cp /var/www/owncloud/apps/invitation/tests/docker/oc-1/CollaborationApp.php /var/www/owncloud/apps/invitation/lib/AppInfo/CollaborationApp.php
+# && chown -R www-data:root /etc/pre_server.d
+
+ENV DEBUG=true
+
+# ENTRYPOINT ["/usr/bin/entrypoint"]
+
+# CMD ["/usr/bin/owncloud" "server"]

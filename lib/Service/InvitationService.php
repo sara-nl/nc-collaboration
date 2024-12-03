@@ -5,9 +5,8 @@ namespace OCA\Collaboration\Service;
 use Exception;
 use OCA\Collaboration\AppInfo\Application;
 use OCA\Collaboration\Db\Schema;
-use OCA\Collaboration\Federation\Invitation;
-use OCA\Collaboration\Federation\InvitationMapper;
-use OCA\Collaboration\Federation\VInvitation;
+use OCA\Collaboration\Db\Invitation;
+use OCA\Collaboration\Db\InvitationMapper;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
@@ -17,6 +16,8 @@ use Psr\Log\LoggerInterface;
  */
 class InvitationService
 {
+    public const NAME = "INVITATION_SERVICE";
+
     private InvitationMapper $mapper;
     private IUserSession $userSession;
     private LoggerInterface $logger;
@@ -29,40 +30,15 @@ class InvitationService
     }
 
     /**
-     * Returns the invitation with the specified id.
-     *
-     * @param int $id
-     * @return VInvitation
-     * @throws NotFoundException in case the invitation could not be found
-     */
-    public function find(int $id): VInvitation
-    {
-        try {
-            $invitation = $this->mapper->find($id);
-            if ($this->userSession->getUser()->getCloudId() === $invitation->getUserCloudID()) {
-                return $invitation;
-            }
-            $this->logger->debug("User with cloud id '" . $this->userSession->getUser()->getCloudId() . "' is not authorized to access invitation with id '$id'.", ['app' => Application::APP_ID]);
-            throw new NotFoundException("Invitation with id=$id not found.");
-        } catch (NotFoundException $e) {
-            $this->logger->debug($e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => Application::APP_ID]);
-            throw new NotFoundException("Invitation with id=$id not found.");
-        } catch (Exception $e) {
-            $this->logger->error($e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => Application::APP_ID]);
-            throw new NotFoundException("Invitation with id=$id not found.");
-        }
-    }
-
-    /**
      * Returns the invitation with the specified token.
      *
      * @param string $token
      * @param bool $protected true if we need session user access check, default is true
-     * @return VInvitation
+     * @return Invitation
      * @throws NotFoundException in case the invitation could not be found
      * @throws ServiceException in case of error
      */
-    public function getByToken(string $token, bool $protected = true): VInvitation
+    public function getByToken(string $token, bool $protected = true): Invitation
     {
         $invitation = null;
         try {
@@ -76,7 +52,7 @@ class InvitationService
         }
         if (
             $protected == false
-            || $this->userSession->getUser()->getCloudId() === $invitation->getUserCloudID()
+            || $this->userSession->getUser()->getUID() === $invitation->getUid()
         ) {
             return $invitation;
         }
@@ -95,7 +71,7 @@ class InvitationService
         try {
             // add access restriction
             if ($protected) {
-                $criteria[Schema::VINVITATION_USER_CLOUD_ID] = [$this->userSession->getUser()->getCloudId()];
+                $criteria[Schema::INVITATION_USER_ID] = [$this->userSession->getUser()->getUID()];
             }
             return $this->mapper->findAll($criteria);
         } catch (Exception $e) {
@@ -121,39 +97,39 @@ class InvitationService
         }
     }
 
-    /**
-     * Updates the invitation according to the specified fields and values.
-     *
-     * @param array $fieldsAndValues one of which must be the token
-     * @param bool $protected true if we need session user access check, default is true
-     * @return bool true if update succeeded, otherwise false
-     */
-    public function update(array $fieldsAndValues, bool $protected = true): bool
-    {
-        if ($protected === true) {
-            if ($this->userSession->getUser() == null) {
-                $this->logger->debug('Unable to update invitation, unauthenticated.', ['app' => Application::APP_ID]);
-                return false;
-            }
-            return $this->mapper->updateInvitation($fieldsAndValues, $this->userSession->getUser()->getCloudId());
-        } else {
-            return $this->mapper->updateInvitation($fieldsAndValues);
-        }
-    }
+    // /**
+    //  * Updates the invitation according to the specified fields and values.
+    //  *
+    //  * @param array $fieldsAndValues one of which must be the token
+    //  * @param bool $protected true if we need session user access check, default is true
+    //  * @return bool true if update succeeded, otherwise false
+    //  */
+    // public function update(array $fieldsAndValues, bool $protected = true): bool
+    // {
+    //     if ($protected === true) {
+    //         if ($this->userSession->getUser() == null) {
+    //             $this->logger->debug('Unable to update invitation, unauthenticated.', ['app' => Application::APP_ID]);
+    //             return false;
+    //         }
+    //         return $this->mapper->updateInvitation($fieldsAndValues, $this->userSession->getUser()->getCloudId());
+    //     } else {
+    //         return $this->mapper->updateInvitation($fieldsAndValues);
+    //     }
+    // }
 
-    /**
-     * Delete all invitations that have one of the specified statuses.
-     *
-     * @param array $statusses
-     * @return void
-     * @throws ServiceException
-     */
-    public function deleteForStatus(array $statuses): void
-    {
-        try {
-            $this->mapper->deleteForStatus($statuses);
-        } catch (Exception $e) {
-            throw new ServiceException($e->getMessage());
-        }
-    }
+    // /**
+    //  * Delete all invitations that have one of the specified statuses.
+    //  *
+    //  * @param array $statusses
+    //  * @return void
+    //  * @throws ServiceException
+    //  */
+    // public function deleteForStatus(array $statuses): void
+    // {
+    //     try {
+    //         $this->mapper->deleteForStatus($statuses);
+    //     } catch (Exception $e) {
+    //         throw new ServiceException($e->getMessage());
+    //     }
+    // }
 }

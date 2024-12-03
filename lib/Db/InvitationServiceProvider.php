@@ -5,7 +5,7 @@
  *
  */
 
-namespace OCA\Collaboration\Federation;
+namespace OCA\Collaboration\Db;
 
 use JsonSerializable;
 use OCA\Collaboration\Db\Schema;
@@ -31,9 +31,9 @@ class InvitationServiceProvider extends Entity implements JsonSerializable
     public function jsonSerialize(): mixed
     {
         return [
-            $this->columnToProperty(Schema::COLLABORATION_SERVICE_PROVIDER_DOMAIN) => $this->domain,
-            $this->columnToProperty(Schema::COLLABORATION_SERVICE_PROVIDER_ENDPOINT) => $this->endpoint,
-            $this->columnToProperty(Schema::COLLABORATION_SERVICE_PROVIDER_NAME) => $this->name,
+            $this->columnToProperty(Schema::INVITATION_SERVICE_PROVIDER_DOMAIN) => $this->domain,
+            $this->columnToProperty(Schema::INVITATION_SERVICE_PROVIDER_ENDPOINT) => $this->endpoint,
+            $this->columnToProperty(Schema::INVITATION_SERVICE_PROVIDER_NAME) => $this->name,
         ];
     }
 }

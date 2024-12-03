@@ -10,7 +10,7 @@ use OCA\Collaboration\AppInfo\InvitationApp;
 use OCA\Collaboration\AppInfo\AppError;
 use OCA\Collaboration\AppInfo\Application;
 use OCA\Collaboration\Db\Schema;
-use OCA\Collaboration\Federation\Invitation;
+use OCA\Collaboration\Db\Invitation;
 use OCA\Collaboration\Service\InvitationService;
 use OCA\Collaboration\Service\NotFoundException;
 use OCA\Collaboration\Service\ServiceException;

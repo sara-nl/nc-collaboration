@@ -38,7 +38,7 @@
 #    },
 
 app_name=collaboration
-# VERSION=please_set_version
+# You must set version, eg. make -e version=v0.0.1 buildapp
 version=$(version)
 app_dir_name=$(notdir $(CURDIR))
 build_tools_directory=$(CURDIR)/build/tools
@@ -190,6 +190,7 @@ buildapp:
 	cd build &&	\
 	ln -s ../ $(app_name) && \
 	tar cvzfh $(appstore_package_name).tar.gz \
+	--exclude="$(app_name)/vendor" \
 	--exclude="$(app_name)/build" \
 	--exclude="$(app_name)/release" \
 	--exclude="$(app_name)/tests" \
@@ -246,3 +247,8 @@ buildapp-tests:
 	--exclude-vcs \
 	$(app_name) && \
 	rm $(app_name)
+
+.PHONY: test
+test: composer
+	$(CURDIR)/vendor/bin/phplint ./ --exclude=vendor
+	$(CURDIR)/vendor/phpunit/phpunit/phpunit -c phpunit.xml

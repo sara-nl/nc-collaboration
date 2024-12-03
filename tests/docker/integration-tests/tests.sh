@@ -2,10 +2,15 @@
 
 # start the actual tests
 echo Start Collaboration app integration tests
-echo sleeping 60s ... giving owncloud time to startup && sleep 15 &&
+echo sleeping 60s ... giving nextcloud time to startup && sleep 25
 
-echo Testing the OCS api
+echo
+echo Testing the OCS api of nc-1.nl, nc-2.nl:
+echo ----------------------------------------
+echo 
 curl -u admin:${ADMIN_PASS} -H 'OCS-APIRequest: true' http://nc-1.nl/ocs/v2.php/core/getapppassword
+echo 
+curl -u admin:${ADMIN_PASS} -H 'OCS-APIRequest: true' http://nc-2.nl/ocs/v2.php/core/getapppassword
 
 echo 
 echo

@@ -15,7 +15,7 @@ RUN echo 'rd-mesh/nc-1.pem' >> /etc/ca-certificates.conf \
 RUN mkdir -p /tmp/collaboration \
     && git clone -b ${BRANCH} https://github.com/sara-nl/nc-invitation.git /tmp/collaboration
 # Add test run requirements: test data, test controller, test routes
-RUN cp /tmp/collaboration/tests/docker/integration-tests/Version20240209130007.php /tmp/collaboration/lib/Migration \
+RUN cp /tmp/collaboration/tests/docker/integration-tests/Version2Date20240209130007.php /tmp/collaboration/lib/Migration \
     && cp /tmp/collaboration/tests/docker/integration-tests/OcsController.php /tmp/collaboration/lib/Controller \
     && mv /tmp/collaboration/appinfo/routes.php /tmp/collaboration/appinfo/app-routes.php \
     && cp /tmp/collaboration/tests/docker/integration-tests/routes.php /tmp/collaboration/appinfo/routes.php

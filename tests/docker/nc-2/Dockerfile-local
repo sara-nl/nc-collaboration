@@ -1,0 +1,33 @@
+ARG FROM_IMAGE=must_be_set_in_env_file
+
+FROM ${FROM_IMAGE} AS builder
+
+RUN apt update \
+    && apt install -y git make nano
+
+# it needs the certs from all mesh hosts
+COPY tests/docker/nc-2/nc-2.nl/certs/cert.pem /usr/share/ca-certificates/rd-mesh/nc-2.pem
+RUN echo 'rd-mesh/nc-2.pem' >> /etc/ca-certificates.conf \
+    && update-ca-certificates \
+    && export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+
+# Add the Collaboration app from local source
+RUN mkdir -p /tmp/collaboration
+COPY . /tmp/collaboration
+
+# Add test run requirements: test data, test controller, test routes
+# RUN cp /tmp/collaboration/tests/docker/integration-tests/data/nc-2/Version2Date20240209130007.php /tmp/collaboration/lib/Migration \
+RUN cp /tmp/collaboration/tests/docker/integration-tests/OcsController.php /tmp/collaboration/lib/Controller \
+    && mv /tmp/collaboration/appinfo/routes.php /tmp/collaboration/appinfo/app-routes.php \
+    && cp /tmp/collaboration/tests/docker/integration-tests/routes.php /tmp/collaboration/appinfo/routes.php
+
+# add pre install script and make Collaboration app
+RUN cp -R /tmp/collaboration/tests/docker/nc-2/before-starting.sh /docker-entrypoint-hooks.d/before-starting
+RUN chown -R www-data /docker-entrypoint-hooks.d/before-starting \
+    && chmod u+x /docker-entrypoint-hooks.d/before-starting/before-starting.sh \
+    && cd /tmp/collaboration \
+    && make -e version=test buildapp-tests
+
+USER www-data
+
+ENV DEBUG=true

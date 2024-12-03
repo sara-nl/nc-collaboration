@@ -4,7 +4,7 @@
  * The invitation service provider mapper.
  */
 
-namespace OCA\Collaboration\Federation;
+namespace OCA\Collaboration\Db;
 
 use Exception;
 use OCA\Collaboration\AppInfo\InvitationApp;
@@ -37,7 +37,7 @@ class InvitationServiceProviderMapper extends QBMapper
             $qb = $this->db->getQueryBuilder();
             $result = $qb->select('*')
                 ->from(Schema::TABLE_COLLABORATION_SERVICE_PROVIDERS, 'dp')
-                ->where($qb->expr()->eq('dp.' . Schema::COLLABORATION_SERVICE_PROVIDER_ENDPOINT, $qb->createNamedParameter($endpoint)))
+                ->where($qb->expr()->eq('dp.' . Schema::INVITATION_SERVICE_PROVIDER_ENDPOINT, $qb->createNamedParameter($endpoint)))
                 ->executeQuery()->fetch();
             if (is_array($result)) {
                 return $this->createInvitationServiceProvider($result);
@@ -49,24 +49,24 @@ class InvitationServiceProviderMapper extends QBMapper
         }
     }
 
-    /**
-     * Returns all invitation service providers
-     *
-     * @return array
-     * @throws NotFoundException
-     */
-    public function allInvitationServiceProviders(): array
-    {
-        try {
-            $qb = $this->db->getQueryBuilder();
-            $qb->select('*')
-                ->from(Schema::TABLE_COLLABORATION_SERVICE_PROVIDERS, 'dp');
-            return $this->createInvitationServiceProviders($qb->executeQuery()->fetchAll());
-        } catch (Exception $e) {
-            $this->logger->error($e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => InvitationApp::APP_NAME]);
-            throw new NotFoundException('Error retrieving all invitation service providers');
-        }
-    }
+    // /**
+    //  * Returns all invitation service providers
+    //  *
+    //  * @return array
+    //  * @throws NotFoundException
+    //  */
+    // public function allInvitationServiceProviders(): array
+    // {
+    //     try {
+    //         $qb = $this->db->getQueryBuilder();
+    //         $qb->select('*')
+    //             ->from(Schema::TABLE_COLLABORATION_SERVICE_PROVIDERS, 'dp');
+    //         return $this->createInvitationServiceProviders($qb->executeQuery()->fetchAll());
+    //     } catch (Exception $e) {
+    //         $this->logger->error($e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => InvitationApp::APP_NAME]);
+    //         throw new NotFoundException('Error retrieving all invitation service providers');
+    //     }
+    // }
 
     /**
      * Builds and returns a new InvitationServiceProvider object from the specified associative array.
@@ -78,9 +78,9 @@ class InvitationServiceProviderMapper extends QBMapper
         if (isset($associativeArray) && count($associativeArray) > 0) {
             $invitationServiceProvider = new InvitationServiceProvider();
             $invitationServiceProvider->setId($associativeArray['id']);
-            $invitationServiceProvider->setDomain($associativeArray[Schema::COLLABORATION_SERVICE_PROVIDER_DOMAIN]);
-            $invitationServiceProvider->setEndpoint($associativeArray[Schema::COLLABORATION_SERVICE_PROVIDER_ENDPOINT]);
-            $invitationServiceProvider->setName($associativeArray[Schema::COLLABORATION_SERVICE_PROVIDER_NAME]);
+            $invitationServiceProvider->setDomain($associativeArray[Schema::INVITATION_SERVICE_PROVIDER_DOMAIN]);
+            $invitationServiceProvider->setEndpoint($associativeArray[Schema::INVITATION_SERVICE_PROVIDER_ENDPOINT]);
+            $invitationServiceProvider->setName($associativeArray[Schema::INVITATION_SERVICE_PROVIDER_NAME]);
             return $invitationServiceProvider;
         }
         $this->logger->error('Unable to create a new InvitationServiceProvider from associative array: ' . print_r($associativeArray, true), ['app' => InvitationApp::APP_NAME]);
