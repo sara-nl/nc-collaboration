@@ -5,21 +5,25 @@
  *
  */
 
-namespace OCA\Collaboration\Federation;
+namespace OCA\Collaboration\Db;
 
 use JsonSerializable;
 use OCA\Collaboration\Db\Schema;
 use OCP\AppFramework\Db\Entity;
 
 /**
- * @method string getUserCloudId()
- * @method void setUserCloudId(string $userCloudId)
+ * @method string getUid()
+ * @method void setUid(string $uid)
  * @method string getToken()
  * @method void setToken(string $token)
- * @method string getProviderEndpoint()
- * @method void setProviderEndpoint(string $providerEndpoint)
- * @method string getRecipientEndpoint()
- * @method void setRecipientEndpoint(string $recipientEndpoint)
+ * @method string getProviderUuid()
+ * @method void setProviderUuid(string $providerUuid)
+ * @method string getProviderDomain()
+ * @method void setProviderDomain(string $providerDomain)
+ * @method string getRecipientProviderUuid()
+ * @method void setRecipientProviderUuid(string $recipientProviderUuid)
+ * @method string getRecipientProviderDomain()
+ * @method void setRecipientProviderDomain(string $recipientProviderDomain)
  * @method string getSenderCloudId()
  * @method void setSenderCloudId(string $senderCloudId)
  * @method string getSenderEmail()
@@ -39,10 +43,12 @@ use OCP\AppFramework\Db\Entity;
  */
 class Invitation extends Entity implements JsonSerializable
 {
-    protected $userCloudId;
+    protected $uid;
     protected $token;
-    protected $providerEndpoint;
-    protected $recipientEndpoint;
+    protected $providerUuid;
+    protected $providerDomain;
+    protected $recipientProviderUuid;
+    protected $recipientProviderDomain;
     protected $senderCloudId;
     protected $senderEmail;
     protected $senderName;
@@ -67,13 +73,15 @@ class Invitation extends Entity implements JsonSerializable
     /** the invitation is invalid (something has gone wrong) */
     public const STATUS_INVALID = 'invalid';
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return [
-            $this->columnToProperty(Schema::INVITATION_USER_CLOUD_ID) => $this->userCloudId,
+            $this->columnToProperty(Schema::INVITATION_USER_ID) => $this->uid,
             $this->columnToProperty(Schema::INVITATION_TOKEN) => $this->token,
-            $this->columnToProperty(Schema::INVITATION_PROVIDER_ENDPOINT) => $this->providerEndpoint,
-            $this->columnToProperty(Schema::INVITATION_RECIPIENT_ENDPOINT) => $this->recipientEndpoint,
+            $this->columnToProperty(Schema::INVITATION_PROVIDER_UUID) => $this->providerUuid,
+            $this->columnToProperty(Schema::INVITATION_PROVIDER_DOMAIN) => $this->providerDomain,
+            $this->columnToProperty(Schema::INVITATION_RECIPIENT_PROVIDER_UUID) => $this->recipientProviderUuid,
+            $this->columnToProperty(Schema::INVITATION_RECIPIENT_PROVIDER_DOMAIN) => $this->recipientProviderDomain,
             $this->columnToProperty(Schema::INVITATION_SENDER_CLOUD_ID) => $this->senderCloudId,
             $this->columnToProperty(Schema::INVITATION_SENDER_EMAIL) => $this->senderEmail,
             $this->columnToProperty(Schema::INVITATION_SENDER_NAME) => $this->senderName,
@@ -83,5 +91,15 @@ class Invitation extends Entity implements JsonSerializable
             $this->columnToProperty(Schema::INVITATION_TIMESTAMP) => $this->timestamp,
             $this->columnToProperty(Schema::INVITATION_STATUS) => $this->status,
         ];
+    }
+
+    /**
+     * Returns either 'sent' or 'received' in the context of the user of the invitation.
+     *
+     * @return string
+     */
+    public function getSentReceived(): string
+    {
+        return 'sent';
     }
 }

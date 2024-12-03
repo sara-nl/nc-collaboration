@@ -16,7 +16,8 @@
     <category>integration</category>
     <bugs>https://github.com/sara-nl/nc-collaboration/issues</bugs>
     <dependencies>
-        <nextcloud min-version="29" max-version="29"/>
+        <!-- min-version seems to be 29.0.1 -->
+        <nextcloud min-version="29" max-version="30"/>
     </dependencies>
     <navigations>
         <navigation>

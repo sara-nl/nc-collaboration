@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   integration-tests:
     build:
@@ -8,13 +6,15 @@ services:
     container_name: integration-tests
     depends_on:
       - nginx-proxy
+      # - nginx-proxy-nc-1
+      # - nginx-proxy-nc-2
     environment:
-      - TOKEN_ACCEPTED_INVITATION=${TOKEN_ACCEPTED_INVITATION}
-      - TOKEN_OPEN_SENT_INVITATION=${TOKEN_OPEN_SENT_INVITATION}
-      - TOKEN_OPEN_RECEIVED_INVITATION=${TOKEN_OPEN_RECEIVED_INVITATION}
+      - NC1_DOMAIN=${NC1_DOMAIN}
+      - NC1_PROVIDER_UUID=${NC1_PROVIDER_UUID}
       - ADMIN_PASS=${ADMIN_PASS}
     extra_hosts:
-      - 'nc-1.nl:10.1.0.160' # this will add this mapping to /etc/hosts
+      - 'nc-1.nl:10.1.0.120' # this will add this mapping to /etc/hosts
+      - 'nc-2.nl:10.1.0.120' # this will add this mapping to /etc/hosts
     networks:
       static-network:
         ipv4_address: 10.1.0.190
@@ -24,17 +24,24 @@ services:
     build:
       context: ../../
       dockerfile: tests/docker/nc-1/Dockerfile-local
+      args:
+        FROM_IMAGE: ${NC1_FROM_IMAGE}
     container_name: nc-1
     restart: unless-stopped
     depends_on:
       - mariadb-nc-1
     environment:
+      - NC1_DOMAIN=${NC1_DOMAIN}
+      - NC1_PROVIDER_UUID=${NC1_PROVIDER_UUID}
+      - NC2_DOMAIN=${NC2_DOMAIN}
+      - NC2_PROVIDER_UUID=${NC2_PROVIDER_UUID}
       - TOKEN_ACCEPTED_INVITATION=${TOKEN_ACCEPTED_INVITATION}
       - TOKEN_OPEN_SENT_INVITATION=${TOKEN_OPEN_SENT_INVITATION}
       - TOKEN_OPEN_RECEIVED_INVITATION=${TOKEN_OPEN_RECEIVED_INVITATION}
       - ADMIN_PASS=${ADMIN_PASS}
     extra_hosts:
-      - 'nc-1.nl:10.1.0.160' # this will add this mapping to /etc/hosts
+      - 'nc-1.nl:10.1.0.120' # this will add this mapping to /etc/hosts
+      - 'nc-2.nl:10.1.0.220' # this will add this mapping to /etc/hosts
     volumes:
       - files-nc-1:/mnt/data
     networks:
@@ -62,37 +69,94 @@ services:
       static-network:
         ipv4_address: 10.1.0.110
 
+  # nexcloud nc-2
+  nc-2:
+    build:
+      context: ../../
+      dockerfile: tests/docker/nc-2/Dockerfile-local
+      args:
+        FROM_IMAGE: ${NC1_FROM_IMAGE}
+    container_name: nc-2
+    restart: unless-stopped
+    depends_on:
+      - mariadb-nc-2
+    environment:
+      - NC1_DOMAIN=${NC2_DOMAIN}
+      - NC1_PROVIDER_UUID=${NC1_PROVIDER_UUID}
+      - NC2_PROVIDER_UUID=${NC2_PROVIDER_UUID}
+      - TOKEN_ACCEPTED_INVITATION=${TOKEN_ACCEPTED_INVITATION}
+      - TOKEN_OPEN_SENT_INVITATION=${TOKEN_OPEN_SENT_INVITATION}
+      - TOKEN_OPEN_RECEIVED_INVITATION=${TOKEN_OPEN_RECEIVED_INVITATION}
+      - ADMIN_PASS=${ADMIN_PASS}
+    extra_hosts:
+      - 'nc-1.nl:10.1.0.120' # this will add this mapping to /etc/hosts
+      - 'nc-2.nl:10.1.0.220' # this will add this mapping to /etc/hosts
+    volumes:
+      - files-nc-2:/mnt/data
+    networks:
+      static-network:
+        ipv4_address: 10.1.0.200
+
+  mariadb-nc-2:
+    image: mariadb:10.9 # minimum required ownCloud version is 10.9
+    container_name: mariadb-nc-2
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=nextcloud
+      - MYSQL_DATABASE=nextcloud
+    command: ["--max-allowed-packet=128M", "--innodb-log-file-size=64M"]
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-u", "root", "--password=nextcloud"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - mysql-nc-2:/var/lib/mysql
+    networks:
+      static-network:
+        ipv4_address: 10.1.0.210
+
+  # The reverse mesh nc-2 proxy with TLS
+  # nginx-proxy-nc-2:
+  #   build:
+  #     context: .
+  #     dockerfile: nginx-proxy-nc-2/Dockerfile
+  #   container_name: nginx-proxy-nc-2
+  #   depends_on:
+  #     - nc-2
+  #   ports:
+  #     - 80:81
+  #     - 443:443
+  #   networks:
+  #     static-network:
+  #       ipv4_address: 10.1.0.220
+
   # The reverse mesh proxy with TLS
   nginx-proxy:
     build:
       context: .
       dockerfile: nginx-proxy/Dockerfile
     container_name: nginx-proxy
-    # volumes:
-    #   - nc-1/nc-1.nl/certs:/etc/nginx/certs/nc-1
     depends_on:
       - nc-1
+      - nc-2
     ports:
       - 80:80
       - 443:443
     networks:
       static-network:
-        ipv4_address: 10.1.0.160
-
-  adminer:
-    image: adminer
-    container_name: adminer
-    restart: always
-    ports:
-      - 8084:8080
-    networks:
-      static-network:
-        ipv4_address: 10.1.0.170
+        ipv4_address: 10.1.0.120
 
 volumes:
   files-nc-1:
       driver: local
   mysql-nc-1:
+      driver: local
+  files-nc-2:
+      driver: local
+  mysql-nc-2:
       driver: local
 
 networks:

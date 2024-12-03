@@ -1,4 +1,6 @@
-FROM nextcloud:29.0.1 as builder
+ARG FROM_IMAGE=must_be_set_in_env_file
+
+FROM ${FROM_IMAGE} AS builder
 
 RUN apt update \
     && apt install -y git make nano
@@ -13,11 +15,12 @@ RUN echo 'rd-mesh/nc-1.pem' >> /etc/ca-certificates.conf \
 RUN mkdir -p /tmp/collaboration
 COPY . /tmp/collaboration
 
-# Add test run requirements: test data, test controller, test routes
-RUN cp /tmp/collaboration/tests/docker/integration-tests/Version20240209130007.php /tmp/collaboration/lib/Migration \
+# Add test run requirements: test data, test controller, test routes, repair steps
+RUN cp /tmp/collaboration/tests/docker/integration-tests/data/nc-1/TestData.php /tmp/collaboration/lib/Migration \
     && cp /tmp/collaboration/tests/docker/integration-tests/OcsController.php /tmp/collaboration/lib/Controller \
     && mv /tmp/collaboration/appinfo/routes.php /tmp/collaboration/appinfo/app-routes.php \
-    && cp /tmp/collaboration/tests/docker/integration-tests/routes.php /tmp/collaboration/appinfo/routes.php
+    && cp /tmp/collaboration/tests/docker/integration-tests/routes.php /tmp/collaboration/appinfo/routes.php \
+    && sed -i "/^<\/info>/i <repair-steps><install><step>OCA\\\\Collaboration\\\\Migration\\\\TestData</step></install></repair-steps>" /tmp/collaboration/appinfo/info.xml
 
 # add pre install script and make Collaboration app
 RUN cp -R /tmp/collaboration/tests/docker/nc-1/before-starting.sh /docker-entrypoint-hooks.d/before-starting

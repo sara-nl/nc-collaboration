@@ -129,3 +129,4 @@ class Version20240209130007 extends SimpleMigrationStep
         return $schema;
     }
 }
+

@@ -8,6 +8,11 @@ RUN echo 'rd-mesh/nc-1.pem' >> /etc/ca-certificates.conf \
     && update-ca-certificates \
     && export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 
+COPY nc-2/nc-2.nl/certs/cert.pem /usr/share/ca-certificates/rd-mesh/nc-2.pem
+RUN echo 'rd-mesh/nc-2.pem' >> /etc/ca-certificates.conf \
+    && update-ca-certificates \
+    && export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+
 RUN mkdir -p /tmp/tests
 COPY integration-tests/ /tmp/tests/
 RUN chmod u+r+x  /tmp/tests/tests.sh
