@@ -97,25 +97,26 @@ class InvitationService
         }
     }
 
-    // /**
-    //  * Updates the invitation according to the specified fields and values.
-    //  *
-    //  * @param array $fieldsAndValues one of which must be the token
-    //  * @param bool $protected true if we need session user access check, default is true
-    //  * @return bool true if update succeeded, otherwise false
-    //  */
-    // public function update(array $fieldsAndValues, bool $protected = true): bool
-    // {
-    //     if ($protected === true) {
-    //         if ($this->userSession->getUser() == null) {
-    //             $this->logger->debug('Unable to update invitation, unauthenticated.', ['app' => Application::APP_ID]);
-    //             return false;
-    //         }
-    //         return $this->mapper->updateInvitation($fieldsAndValues, $this->userSession->getUser()->getCloudId());
-    //     } else {
-    //         return $this->mapper->updateInvitation($fieldsAndValues);
-    //     }
-    // }
+    /**
+     * Updates the invitation according to the specified fields and values.
+     * Params must contain token of the invitation to update, and minimum one additional field to update.
+     *
+     * @param array $fieldsAndValues one of which must be the token
+     * @param bool $protected true if we need session user access check, default is true
+     * @return bool true if update succeeded, otherwise false
+     */
+    public function update(array $fieldsAndValues, bool $protected = true): bool
+    {
+        if ($protected === true) {
+            if ($this->userSession->getUser() == null) {
+                $this->logger->debug('Unable to update invitation, unauthenticated.', ['app' => Application::APP_ID]);
+                return false;
+            }
+            return $this->mapper->updateInvitation($fieldsAndValues, $this->userSession->getUser()->getUID());
+        } else {
+            return $this->mapper->updateInvitation($fieldsAndValues);
+        }
+    }
 
     // /**
     //  * Delete all invitations that have one of the specified statuses.

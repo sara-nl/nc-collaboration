@@ -3,7 +3,7 @@ ARG FROM_IMAGE=must_be_set_in_env_file
 FROM ${FROM_IMAGE} AS builder
 
 RUN apt update \
-    && apt install -y git make nano
+    && apt install -y git make
 
 # it needs the certs from all mesh hosts
 COPY tests/docker/nc-1/nc-1.nl/certs/cert.pem /usr/share/ca-certificates/rd-mesh/nc-1.pem
@@ -17,7 +17,7 @@ COPY . /tmp/collaboration
 
 # Add test run requirements: test data, test controller, test routes, repair steps
 RUN cp /tmp/collaboration/tests/docker/integration-tests/data/nc-1/TestData.php /tmp/collaboration/lib/Migration \
-    && cp /tmp/collaboration/tests/docker/integration-tests/OcsController.php /tmp/collaboration/lib/Controller \
+    # && cp /tmp/collaboration/tests/docker/integration-tests/OcsController.php /tmp/collaboration/lib/Controller \
     && mv /tmp/collaboration/appinfo/routes.php /tmp/collaboration/appinfo/app-routes.php \
     && cp /tmp/collaboration/tests/docker/integration-tests/routes.php /tmp/collaboration/appinfo/routes.php \
     && sed -i "/^<\/info>/i <repair-steps><install><step>OCA\\\\Collaboration\\\\Migration\\\\TestData</step></install></repair-steps>" /tmp/collaboration/appinfo/info.xml

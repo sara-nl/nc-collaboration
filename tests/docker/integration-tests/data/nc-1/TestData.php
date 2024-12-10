@@ -87,6 +87,7 @@ class TestData implements IRepairStep
         print_r("Add test invitation with status: " . Invitation::STATUS_INVALID . "\n");
         $invitation = new Invitation();
         $invitation->setUid("admin");
+        $invitation->setToken(getenv('TOKEN_INVALID_INVITATION'));
         $invitation->setStatus(Invitation::STATUS_INVALID);
         $invitation->setProviderUuid(getenv('NC1_PROVIDER_UUID'));
         $invitation->setProviderDomain(getenv('NC1_DOMAIN'));

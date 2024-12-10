@@ -16,9 +16,7 @@ RUN mkdir -p /tmp/collaboration
 COPY . /tmp/collaboration
 
 # Add test run requirements: test data, test controller, test routes
-# RUN cp /tmp/collaboration/tests/docker/integration-tests/data/nc-2/Version2Date20240209130007.php /tmp/collaboration/lib/Migration \
-RUN cp /tmp/collaboration/tests/docker/integration-tests/OcsController.php /tmp/collaboration/lib/Controller \
-    && mv /tmp/collaboration/appinfo/routes.php /tmp/collaboration/appinfo/app-routes.php \
+RUN mv /tmp/collaboration/appinfo/routes.php /tmp/collaboration/appinfo/app-routes.php \
     && cp /tmp/collaboration/tests/docker/integration-tests/routes.php /tmp/collaboration/appinfo/routes.php
 
 # add pre install script and make Collaboration app

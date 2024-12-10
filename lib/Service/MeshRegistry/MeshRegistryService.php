@@ -9,6 +9,7 @@ namespace OCA\Collaboration\Service\MeshRegistry;
 
 use Exception;
 use OCA\Collaboration\AppInfo\Application;
+use OCA\Collaboration\AppInfo\Endpoints;
 use OCA\Collaboration\Db\CollaborationServiceProviderMapper;
 use OCA\Collaboration\Db\Schema;
 use OCA\Collaboration\Service\ApplicationConfigurationException;
@@ -26,19 +27,12 @@ class MeshRegistryService
     private IConfig $config;
     private LoggerInterface $logger;
 
-    private const ENDPOINT_FORWARD_INVITE = '/mesh-registry/forward-invite';
-    public const ENDPOINT_GET_INVITE = '/invite';
-
     /** @var IRequest */
     private IRequest $request;
 
     /** @var CollaborationServiceProviderMapper */
     private CollaborationServiceProviderMapper $collaborationServiceProviderMapper;
 
-    // public const ENDPOINT_ACCEPT_INVITE = '/accept-invite';
-    // public const ENDPOINT_HANDLE_INVITE = '/handle-invite';
-    // public const ENDPOINT_INVITE_ACCEPTED = '/ocm/invite-accepted';
-    // public const ENDPOINT_INVITATION_SERVICE_PROVIDER = '/registry/invitation-service-provider';
     // private const ROUTE_PAGE_WAYF = 'page.wayf';
     // /** @depricated The domain of the sender's provider */
     // /** The endpoint of the sender's provider */
@@ -119,7 +113,7 @@ class MeshRegistryService
     private function getForwardInviteEndpointUrl()
     {
         try {
-            $endpointUrl = $this->getApplicationUrl() . self::ENDPOINT_FORWARD_INVITE;
+            $endpointUrl = $this->getApplicationUrl() . Endpoints::ENDPOINT_FORWARD_INVITE;
             return $endpointUrl;
         } catch (ServiceException $e) {
             $this->logger->error("getForwardInviteEndpointUrl failed with error: " . $e->getMessage() . " Trace: " . $e->getTraceAsString(), ['app' => Application::APP_ID]);

@@ -16,7 +16,8 @@ $ocsRoutes = [
     'ocs' => [
         ['root' => '/collaboration',    'name' => 'ocs#find_invitations',           'url' => '/invitations', 'verb' => 'GET'],
         ['root' => '/collaboration',    'name' => 'ocs#find_invitation_for_token',  'url' => '/invitations/{token}', 'verb' => 'GET'],
-        ['root' => '/collaboration',    'name' => 'ocs#create_invitation',          'url' => '/invitations', 'verb' => 'POST'],
+        ['root' => '/collaboration',    'name' => 'ocs#update_invitation',          'url' => '/invitations/{token}', 'verb' => 'PATCH'],
+        ['root' => '/collaboration',    'name' => 'ocs#new_invitation',             'url' => '/invitations', 'verb' => 'POST'],
         ['root' => '/collaboration',    'name' => 'ocs#handle_invite',              'url' => '/handle-invite', 'verb' => 'GET'],
 
         // ['root' => '/collaboration', 'name' => 'ocs#invitation_get_by_token',       'url' => '/invitation-service/invitations/{token}', 'verb' => 'GET'],

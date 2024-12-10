@@ -7,29 +7,20 @@
 
 namespace OCA\Collaboration\Controller;
 
-use Exception;
-use OC\AppFramework\App;
 use OCA\Collaboration\AppInfo\AppError;
 use OCA\Collaboration\AppInfo\Application;
 use OCA\Collaboration\AppInfo\MeshRegistryError;
 use OCA\Collaboration\Db\CollaborationServiceProvider;
 use OCA\Collaboration\Db\Schema;
-use OCA\Collaboration\HttpClient;
-use OCA\Collaboration\Service\ApplicationConfigurationException;
 use OCA\Collaboration\Service\CollaborationServiceProviderService;
 use OCA\Collaboration\Service\MeshRegistry\MeshRegistryService;
-use OCA\Collaboration\Service\NotFoundException;
 use OCA\Collaboration\Service\ServiceException;
-use OCA\Invitation\AppInfo\Application as AppInfoApplication;
-use OCP\App\IAppManager;
-use OCP\AppFramework\App as AppFrameworkApp;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\Http\TemplateResponse;
-use OCP\Files\Template\Template;
 use OCP\IAppConfig;
 use OCP\IRequest;
 use OCP\IURLGenerator;
@@ -62,8 +53,6 @@ class MeshRegistryController extends Controller
     public function providers(): DataResponse
     {
         try {
-            $this->logger->debug(' - pathInfo: ' . $this->request->getPathInfo() . ', - rawPathInfo: ' . $this->request->getRawPathInfo() . ', - serverHost: ' . $this->request->getServerHost() . ' - requestUri' . $this->request->getRequestUri());
-            $this->logger->debug(' - appConfig: ' . print_r($this->appConfig->getAllValues(Application::APP_ID), true));
             $providers = $this->meshRegistryService->allProviders();
             return new DataResponse(
                 [

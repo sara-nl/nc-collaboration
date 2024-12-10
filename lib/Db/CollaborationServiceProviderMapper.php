@@ -35,7 +35,6 @@ class CollaborationServiceProviderMapper extends QBMapper
             $this->logger->error($e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => Application::APP_ID]);
             throw new NotFoundException($e->getMessage());
         }
-        throw new NotFoundException("No Collaboration Service Providers found.");
     }
 
     /** Returns the collaboration service provider with the specified uuid, or NotFoundException if it could not be found.

@@ -14,6 +14,7 @@ class HttpClient
      * Executes a POST request.
      *
      * @param string $url
+     * @param array $data the data to post
      * @param string $basicAuthToken
      * @param string $bearerAuthToken
      * @param string $simpleUserPass
@@ -99,7 +100,125 @@ class HttpClient
             } catch (Exception $e) {
                 // just try json next
             }
-            return json_decode($output, true);
+            $decoded = json_decode($output, true);
+            if (isset($decoded)) {
+                $decoded['http_status_code'] = $httpCode;
+                $decoded['headers'] = $headers;
+                return $decoded;
+            }
+            $result = [];
+            $result['data'] = $output;
+            $result['http_status_code'] = $httpCode;
+            $result['headers'] = $headers;
+            return $result;
+        } catch (Exception $e) {
+            print_r($output);
+            print_r($info);
+            throw new Exception($e->getTraceAsString());
+        }
+    }
+
+    /**
+     * Executes a PATCH request.
+     *
+     * @param string $url
+     * @param array $data the properties to patch
+     * @param string $basicAuthToken
+     * @param string $bearerAuthToken
+     * @param string $simpleUserPass
+     * @param array $headers
+     * @param bool $ignoreHttpStatus do not throw exception if HTTP status is not OK, defaults to true
+     * @return mixed returns an array in the standardized format:
+     *  [
+     *      'data' => if successfull,
+     *          or
+     *      'message' => in case of error,
+     * 
+     *      'http_status_code' => HTTP status code
+     *  ]
+     * @throws HttpException
+     */
+    public function curlPatch(
+        string $url,
+        array $params = [],
+        string $basicAuthToken = "",
+        string $bearerAuthToken = "",
+        string $simpleUserPass = "",
+        array $headers = [],
+        bool $ignoreHttpStatus = true,
+    ) {
+        try {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
+            // OCS and non-OCS calls apparently need different encodings of the PATCH fields
+            if ($basicAuthToken == "" && $bearerAuthToken == "" && $simpleUserPass == "") {
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
+            } else {
+                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+            }
+            $httpHeaders = [];
+            if ($basicAuthToken != "") {
+                array_push($httpHeaders, "Authorization: Basic {$basicAuthToken}");
+            }
+            if ($bearerAuthToken != "") {
+                array_push($httpHeaders, "Authorization: Bearer {$bearerAuthToken}");
+            }
+            if ($simpleUserPass != "") {
+                curl_setopt($ch, CURLOPT_USERPWD, $simpleUserPass);
+            }
+            if (!empty($headers)) {
+                foreach ($headers as $header) {
+                    array_push($httpHeaders, $header);
+                }
+            }
+            if (!empty($httpHeaders)) {
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $httpHeaders);
+            }
+            $headers = [];
+            $this->fillResponseHeaders($ch, $headers);
+
+            $output = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+            $info = curl_getinfo($ch);
+            curl_close($ch);
+            if (!isset($output) || $output == false) {
+                throw new Exception('curl_exec error > curl_getinfo: ' . print_r($info, true));
+            }
+
+            // Process xml or json output and return the result
+            try {
+                $ocs = new SimpleXMLElement($output);
+                if ($ocs->meta->status == 'ok') {
+                    $result = Util::simplexmlToArray($ocs->data);
+                    $result['http_status_code'] = $httpCode;
+                    $result['headers'] = $headers;
+                    return $result;
+                } else if ($ignoreHttpStatus) { // return the result regardless of the HTTP status
+                    $result = Util::simplexmlToArray($ocs->data);
+                    $result['http_status_code'] = $httpCode;
+                    $result['headers'] = $headers;
+                    return $result;
+                } else {
+                    throw new Exception($ocs->meta->statuscode . '. ' . $ocs->meta->message);
+                }
+            } catch (Exception $e) {
+                // just try json next
+            }
+            $decoded = json_decode($output, true);
+            if (isset($decoded)) {
+                $decoded['http_status_code'] = $httpCode;
+                $decoded['headers'] = $headers;
+                return $decoded;
+            }
+            $result = [];
+            $result['data'] = $output;
+            $result['http_status_code'] = $httpCode;
+            $result['headers'] = $headers;
+            return $result;
         } catch (Exception $e) {
             print_r($output);
             print_r($info);

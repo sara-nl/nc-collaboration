@@ -26,8 +26,11 @@ declare(strict_types=1);
 return [
     'routes' => [
         /** Collaboration Service Provider */
-        ['name' => 'collaboration_service_provider#provider',   'url' => '/provider', 'verb' => 'GET'],
-        ['name' => 'collaboration_service_provider#services',   'url' => '/provider/services', 'verb' => 'GET'],
+        ['name' => 'collaboration_service_provider#provider',           'url' => '/provider', 'verb' => 'GET'],
+        ['name' => 'collaboration_service_provider#services',           'url' => '/provider/services', 'verb' => 'GET'],
+        ['name' => 'collaboration_service_provider#create_invite',      'url' => '/provider/create-invite', 'verb' => 'POST'],
+        ['name' => 'collaboration_service_provider#handle_invite',      'url' => '/provider/handle-invite', 'verb' => 'GET'],
+        ['name' => 'collaboration_service_provider#accept_invite',      'url' => '/provider/accept-invite/{token}', 'verb' => 'GET'],
 
         /** Mesh Registry Service */
         ['name' => 'mesh_registry#providers',                   'url' => '/mesh-registry/providers', 'verb' => 'GET'],
@@ -36,9 +39,13 @@ return [
 
         /** Invitation Service */
         ['name' => 'invitation#find',                           'url' => '/invitations', 'verb' => 'GET'],
+        ['name' => 'invitation#new_invitation',                 'url' => '/invitations', 'verb' => 'POST'],
         ['name' => 'invitation#get_by_token',                   'url' => '/invitations/{token}', 'verb' => 'GET'],
-        ['name' => 'invitation#create_invitation',              'url' => '/invitations', 'verb' => 'POST'],
-        ['name' => 'invitation#handle_invite',                  'url' => '/handle-invite', 'verb' => 'GET'],
+        ['name' => 'invitation#update',                         'url' => '/invitations/{token}', 'verb' => 'PATCH'],
+
+        /** OCM - Open Cloud Mesh protocol */
+        ['name' => 'ocm#invite_accepted',                       'url' => '/ocm/invite-accepted', 'verb' => 'POST'],
+
 
         // ['name' => 'page#index',                                'url' => '/', 'verb' => 'GET'],
 
@@ -52,8 +59,5 @@ return [
         //  */
         // ['name' => 'mesh_registry#providers',                   'url' => '/mesh-registry/providers/{uuid}', 'verb' => 'GET'],
 
-        // // OCM - Open Cloud Mesh protocol
-        // // unprotected
-        // ['name' => 'ocm#invite_accepted',                       'url' => '/ocm/invite-accepted', 'verb' => 'POST'],
     ]
 ];

@@ -61,36 +61,35 @@ class InvitationMapper extends QBMapper
      */
     public function findAll(array $criteria): array
     {
-        $qb = $this->db->getQueryBuilder();
-        // $qb->automaticTablePrefix(false);
-        $query = $qb->select('*')->from(Schema::TABLE_INVITATIONS, 'i')->setMaxResults(100);
-        $i = 0;
-        foreach ($criteria as $field => $values) {
-            if ($i == 0) {
-                // $or = $qb->expr()->orX();
-                $or = [];
-                foreach ($values as $value) {
-                    // $or->add($qb->expr()->eq("i.$field", $qb->createNamedParameter($value)));
-                    $or[] = $qb->expr()->eq("i.$field", $qb->createNamedParameter($value));
-                }
-                // $query->where($or);
-                $query->where(...$or);
-            } else {
-                // $or = $qb->expr()->orX();
-                $or = [];
-                foreach ($values as $value) {
-                    // $or->add($qb->expr()->eq("i.$field", $qb->createNamedParameter($value)));
-                    $or[] = $qb->expr()->eq("i.$field", $qb->createNamedParameter($value));
-                }
-                // $query->andWhere($or);
-                $query->andWhere(...$or);
-            }
-            ++$i;
-        }
-        $this->logger->debug($query->getSQL());
-        $query->addOrderBy(Schema::INVITATION_TIMESTAMP, 'DESC');
+        try {
 
-        return $query->executeQuery()->fetchAll();
+            $qb = $this->db->getQueryBuilder();
+            // $qb->automaticTablePrefix(false);
+            $query = $qb->select('*')->from(Schema::TABLE_INVITATIONS, 'i')->setMaxResults(100);
+            $i = 0;
+            foreach ($criteria as $field => $values) {
+                if ($i == 0) {
+                    $or = [];
+                    foreach ($values as $value) {
+                        $or[] = $qb->expr()->eq("i.$field", $qb->createNamedParameter($value));
+                    }
+                    $query->where(...$or);
+                } else {
+                    $or = [];
+                    foreach ($values as $value) {
+                        $or[] = $qb->expr()->eq("i.$field", $qb->createNamedParameter($value));
+                    }
+                    $query->andWhere(...$or);
+                }
+                ++$i;
+            }
+            $this->logger->debug($query->getSQL());
+            $query->addOrderBy(Schema::INVITATION_TIMESTAMP, 'DESC');
+            return $this->findEntities($query);
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage() . ' Trace: ' . $e->getTraceAsString(), ['app' => Application::APP_ID]);
+            throw new NotFoundException($e->getMessage());
+        }
     }
 
     /**
@@ -104,18 +103,21 @@ class InvitationMapper extends QBMapper
     public function updateInvitation(array $fieldsAndValues, string $uid = ''): bool
     {
         try {
+            $this->logger->debug(" - updatInvitation($uid, " . print_r($fieldsAndValues, true) . ")");
             $qb = $this->db->getQueryBuilder();
-            $updateQuery = $qb->update(Schema::TABLE_INVITATIONS, 'i');
+            $updateQuery = $qb->update(Schema::TABLE_INVITATIONS);
             if (isset($fieldsAndValues[Schema::INVITATION_TOKEN]) && count($fieldsAndValues) > 1) {
                 foreach ($fieldsAndValues as $field => $value) {
                     if ($field != Schema::INVITATION_TOKEN) {
-                        $updateQuery->set("i.$field", $qb->createNamedParameter($value));
+                        $updateQuery->set($field, $qb->createNamedParameter($value));
                     }
                 }
-                $andWhere = $qb->expr()->andX();
-                $andWhere->add($qb->expr()->eq('i.' . Schema::INVITATION_TOKEN, $qb->createNamedParameter($fieldsAndValues[Schema::INVITATION_TOKEN])));
+                $andToken = $qb->expr()->eq(Schema::INVITATION_TOKEN, $qb->createNamedParameter($fieldsAndValues[Schema::INVITATION_TOKEN]));
+                $andWhere = $qb->expr()->andX(
+                    $andToken,
+                );
                 if ($uid !== '') {
-                    $andWhere->add($qb->expr()->eq('i.' . Schema::INVITATION_USER_ID, $qb->createNamedParameter($uid)));
+                    $andWhere->add($qb->expr()->eq(Schema::INVITATION_USER_ID, $qb->createNamedParameter($uid)));
                 }
                 $updateQuery->where($andWhere);
                 $this->logger->debug($updateQuery->getSQL());

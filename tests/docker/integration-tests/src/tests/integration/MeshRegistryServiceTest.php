@@ -11,7 +11,6 @@ class MeshRegistryServiceTest extends TestCase
 {
     private const NC_1_HOST = "http://nc-1.nl";
     private const NC_1_APP_ROOT = "http://nc-1.nl/apps/collaboration";
-    private const NC_1_OCS_ROOT = "http://nc-1.nl/ocs/v2.php/collaboration";
     private string $authToken = "";
     private string $providerUuid = "";
     private string $nc1Domain = "";
