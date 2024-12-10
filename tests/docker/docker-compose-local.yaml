@@ -6,8 +6,6 @@ services:
     container_name: integration-tests
     depends_on:
       - nginx-proxy
-      # - nginx-proxy-nc-1
-      # - nginx-proxy-nc-2
     environment:
       - NC1_DOMAIN=${NC1_DOMAIN}
       - NC1_PROVIDER_UUID=${NC1_PROVIDER_UUID}
@@ -25,7 +23,7 @@ services:
       context: ../../
       dockerfile: tests/docker/nc-1/Dockerfile-local
       args:
-        FROM_IMAGE: ${NC1_FROM_IMAGE}
+        FROM_IMAGE: ${NC1_IMAGE}
     container_name: nc-1
     restart: unless-stopped
     depends_on:
@@ -76,7 +74,7 @@ services:
       context: ../../
       dockerfile: tests/docker/nc-2/Dockerfile-local
       args:
-        FROM_IMAGE: ${NC1_FROM_IMAGE}
+        FROM_IMAGE: ${NC2_IMAGE}
     container_name: nc-2
     restart: unless-stopped
     depends_on:
@@ -118,21 +116,6 @@ services:
     networks:
       static-network:
         ipv4_address: 10.1.0.210
-
-  # The reverse mesh nc-2 proxy with TLS
-  # nginx-proxy-nc-2:
-  #   build:
-  #     context: .
-  #     dockerfile: nginx-proxy-nc-2/Dockerfile
-  #   container_name: nginx-proxy-nc-2
-  #   depends_on:
-  #     - nc-2
-  #   ports:
-  #     - 80:81
-  #     - 443:443
-  #   networks:
-  #     static-network:
-  #       ipv4_address: 10.1.0.220
 
   # The reverse mesh proxy with TLS
   nginx-proxy:

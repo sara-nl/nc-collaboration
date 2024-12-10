@@ -24,7 +24,7 @@ use OCP\IUserSession;
 use OCP\Template;
 use OCP\Util;
 use Psr\Log\LoggerInterface;
-use Ramsey\Uuid\Nonstandard\Uuid;
+use Ramsey\Uuid\Uuid;
 
 class CollaborationServiceProviderController extends Controller
 {

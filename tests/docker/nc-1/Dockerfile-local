@@ -15,9 +15,8 @@ RUN echo 'rd-mesh/nc-1.pem' >> /etc/ca-certificates.conf \
 RUN mkdir -p /tmp/collaboration
 COPY . /tmp/collaboration
 
-# Add test run requirements: test data, test controller, test routes, repair steps
+# Add test run requirements
 RUN cp /tmp/collaboration/tests/docker/integration-tests/data/nc-1/TestData.php /tmp/collaboration/lib/Migration \
-    # && cp /tmp/collaboration/tests/docker/integration-tests/OcsController.php /tmp/collaboration/lib/Controller \
     && mv /tmp/collaboration/appinfo/routes.php /tmp/collaboration/appinfo/app-routes.php \
     && cp /tmp/collaboration/tests/docker/integration-tests/routes.php /tmp/collaboration/appinfo/routes.php \
     && sed -i "/^<\/info>/i <repair-steps><install><step>OCA\\\\Collaboration\\\\Migration\\\\TestData</step></install></repair-steps>" /tmp/collaboration/appinfo/info.xml

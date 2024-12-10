@@ -1,32 +1,40 @@
-FROM nextcloud:29.0.1 as builder
+ARG NC_IMAGE=should_be_set_as_workflow_env
 
-ARG BRANCH
+FROM ${NC_IMAGE} AS builder
+
+ARG BRANCH=should_be_set_as_workflow_env
+RUN echo "Using branch ${BRANCH}"
 
 RUN apt update \
-    && apt install -y git make nano
+    && apt install -y git make
 
 # it needs the certs from all mesh hosts
 COPY nc-2/nc-2.nl/certs/cert.pem /usr/share/ca-certificates/rd-mesh/nc-2.pem
 RUN echo 'rd-mesh/nc-2.pem' >> /etc/ca-certificates.conf \
-     && update-ca-certificates \
+    && update-ca-certificates \
     && export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 
 # Add the Invitation app from repository
 RUN mkdir -p /tmp/collaboration \
-    && git clone -b ${BRANCH} https://github.com/sara-nl/nc-invitation.git /tmp/collaboration
-# Add test run requirements: test data, test controller, test routes
-RUN cp /tmp/collaboration/tests/docker/integration-tests/Version2Date20240209130007.php /tmp/collaboration/lib/Migration \
-    && cp /tmp/collaboration/tests/docker/integration-tests/OcsController.php /tmp/collaboration/lib/Controller \
+    && git clone -b ${BRANCH} https://github.com/sara-nl/nc-collaboration.git /tmp/collaboration
+# Add test run requirements
+RUN cp /tmp/collaboration/tests/docker/integration-tests/data/nc-2/TestData.php /tmp/collaboration/lib/Migration \
     && mv /tmp/collaboration/appinfo/routes.php /tmp/collaboration/appinfo/app-routes.php \
-    && cp /tmp/collaboration/tests/docker/integration-tests/routes.php /tmp/collaboration/appinfo/routes.php
+    && cp /tmp/collaboration/tests/docker/integration-tests/routes.php /tmp/collaboration/appinfo/routes.php \
+    && sed -i "/^<\/info>/i <repair-steps><install><step>OCA\\\\Collaboration\\\\Migration\\\\TestData</step></install></repair-steps>" /tmp/collaboration/appinfo/info.xml
 
-# add pre install script and make invitation app
+# add pre install script and make Collaboration app
 RUN cp -R /tmp/collaboration/tests/docker/nc-2/before-starting.sh /docker-entrypoint-hooks.d/before-starting
 RUN chown -R www-data /docker-entrypoint-hooks.d/before-starting \
     && chmod u+x /docker-entrypoint-hooks.d/before-starting/before-starting.sh \
+    && cd /tmp \
+    && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
+    && php composer-setup.php \
+    && php -r "unlink('composer-setup.php');" \
     && cd /tmp/collaboration \
-    && make -e version=test buildapp-tests \
-    && chown -R www-data /tmp/collaboration
+    && php ../composer.phar install \
+    && make -e version=test buildapp-tests
 
 USER www-data
 
