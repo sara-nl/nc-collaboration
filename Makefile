@@ -48,6 +48,7 @@ appstore_build_directory=$(CURDIR)/build/artifacts/app
 appstore_package_name=$(appstore_build_directory)/$(app_name)_$(version)
 npm=$(shell which npm 2> /dev/null)
 composer=$(shell which composer 2> /dev/null)
+integration_tests_dir=${CURDIR}/tests/docker
 
 all: clean dev-setup build-js-production
 
@@ -179,6 +180,26 @@ source:
 	--exclude="../$(app_name)/*.log" \
 	--exclude="../$(app_name)/js/*.log" \
 	../$(app_name) \
+
+# Runs the integration tests on local src
+.PHONY: integration-tests-local
+integration-tests-local:
+	@echo "Running the integration tests ..."
+	# cd ${integration_tests_dir}
+	docker compose --verbose --progress=plain -f ${integration_tests_dir}/docker-compose-local.yaml run \
+	--build --entrypoint /bin/sh --rm integration-tests -- ./tmp/tests/tests.sh
+	sh ${integration_tests_dir}/docker-cleanup.sh
+	@echo "... Finished running the integration tests"
+
+# Runs the integration tests on the github src
+.PHONY: integration-tests-github
+integration-tests-github:
+	@echo "Running the integration tests against github src ..."
+	# cd ${integration_tests_dir}
+	docker compose --verbose --progress=plain -f ${integration_tests_dir}/docker-compose-github.yaml run \
+	--build --entrypoint /bin/sh --rm integration-tests -- ./tmp/tests/tests.sh
+	sh ${integration_tests_dir}/docker-cleanup.sh
+	@echo "... Finished running the integration tests"
 
 # Builds the source package for the app store, ignores php and js tests
 # command: make version={version_number} buildapp
